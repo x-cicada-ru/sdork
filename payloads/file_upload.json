@@ -1,0 +1,19 @@
+{
+  "file_upload": [
+    "shell.php",
+    "shell.php.jpg",
+    "shell.phtml",
+    "shell.php%00.jpg",
+    "shell.php%00.png",
+    "shell.php%0a.jpg",
+    "shell.php%0d%0a.jpg",
+    "shell.php::$DATA",
+    "shell.php%20",
+    "shell.php.",
+    "shell.php;.jpg",
+    "shell.php%2E%2E%2F",
+    "shell.pHp",
+    "shell.PhP",
+    "shell.php.gif"
+  ]
+}

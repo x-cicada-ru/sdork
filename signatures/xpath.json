@@ -1,0 +1,58 @@
+{
+  "xpath": {
+    "payload_ref": "payloads/xpath.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "xpath_exception",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(XPathException|Invalid XPath|XPATH syntax error|System\\.Xml\\.XPath|org\\.jaxen|javax\\.xml\\.xpath|SimpleXMLElement|DOMXPath)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "XPath engine error disclosed"
+      },
+      {
+        "id": "xpath_expression_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(invalid expression|unexpected token.*xpath|XPath.*(parse|evaluation).*error|compiled xpath expression)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "Expression parse/evaluation error"
+      },
+      {
+        "id": "xpath_boolean_diff",
+        "source": "body",
+        "match": "diff",
+        "against": "control_payload",
+        "min_delta_percent": 15,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "boolean_blind",
+        "note": "TRUE vs FALSE XPath condition returns different content"
+      },
+      {
+        "id": "xpath_auth_bypass",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(dashboard|logout|welcome|my account|profile)",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "auth_bypass",
+        "note": "Login succeeded with a tautology payload; compare with control"
+      }
+    ],
+    "preconditions": [
+      "Application must use XPath queries (XML-backed auth/search)",
+      "Compare against a control request to rule out generic responses"
+    ],
+    "false_positive_hints": [
+      "SQL errors, not XPath errors",
+      "XML documents/help pages containing XPath examples",
+      "Generic login success page after any input",
+      "WAF echo"
+    ]
+  }
+}

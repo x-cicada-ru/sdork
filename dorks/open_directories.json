@@ -1,0 +1,24 @@
+{
+  "open_directories": [
+    "site:*.com intitle:\"index of\" (private OR confidential)",
+    "site:*.com intitle:\"index of\" \"parent directory\" config",
+    "site:*.com inurl:/uploads intitle:index.of",
+    "site:*.com intitle:\"index of\" \"userdata\"",
+    "site:*.com intitle:\"index of\" \"backup\"",
+    "site:*.com intitle:\"index of\" \"dump\"",
+    "site:*.com intitle:\"index of\" \"old\"",
+    "site:*.com intitle:\"index of\" \".git\"",
+    "site:*.com intitle:\"index of\" \".svn\"",
+    "site:*.com intitle:\"index of\" \"config\"",
+    "site:*.com intitle:\"index of\" \"logs\"",
+    "site:*.com intitle:\"index of\" \"tmp\"",
+    "site:*.com intitle:\"index of\" \"private\"",
+    "site:*.com intitle:\"index of\" \"secret\"",
+    "site:*.com intitle:\"index of\" \"passwords\"",
+    "site:*.com intitle:\"index of\" \"users\"",
+    "site:*.com intitle:\"index of\" \"customers\"",
+    "site:*.com intitle:\"index of\" \"clients\"",
+    "site:*.com intitle:\"index of\" \"db\"",
+    "site:*.com intitle:\"index of\" \"database\""
+  ]
+}

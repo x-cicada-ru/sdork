@@ -1,0 +1,77 @@
+{
+  "file_upload": {
+    "payload_ref": "payloads/file_upload.json",
+    "injection": ["body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "upload_execution_uid",
+        "source": "body",
+        "match": "regex",
+        "pattern": "uid=\\d+\\([a-z0-9_.-]+\\)\\s+gid=\\d+",
+        "requires": ["second_request"],
+        "confidence": "high",
+        "technique": "rce",
+        "note": "Uploaded file executed as code (request its URL and check for command output)"
+      },
+      {
+        "id": "upload_phpinfo",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(PHP Version =>|allow_url_fopen|Configuration File \\(php\\.ini\\) Path)",
+        "requires": ["second_request"],
+        "confidence": "high",
+        "technique": "rce",
+        "note": "Uploaded PHP executed and printed phpinfo()"
+      },
+      {
+        "id": "upload_accessible",
+        "source": "status",
+        "match": "in",
+        "values": [200],
+        "requires": ["second_request", "upload_path"],
+        "confidence": "medium",
+        "technique": "file_served",
+        "note": "Uploaded file is served back; pair with execution or MIME sniffing checks"
+      },
+      {
+        "id": "upload_accept_message",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(upload (complete|successful|succeeded)|file uploaded successfully|move_uploaded_file)",
+        "confidence": "medium",
+        "technique": "bypass",
+        "note": "Server accepted a dangerous extension/name variant"
+      },
+      {
+        "id": "upload_path_leak",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(/uploads?/[^\\s\"'<>]+\\.(php|phtml|php\\d|jsp|asp|aspx|war))",
+        "confidence": "medium",
+        "technique": "path_exposure",
+        "note": "Response reveals stored path with an executable extension"
+      },
+      {
+        "id": "upload_svg_html",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(<svg[^>]*onload|<script>alert)",
+        "requires": ["second_request"],
+        "confidence": "medium",
+        "technique": "stored_xss",
+        "note": "Uploaded SVG/HTML executes scripts when served"
+      }
+    ],
+    "preconditions": [
+      "Confirm with a second request fetching the uploaded file",
+      "Test both extension filter and Content-Type validation independently"
+    ],
+    "false_positive_hints": [
+      "Server responds 'file type not allowed' / 'invalid file'",
+      "File saved with a sanitized name/extension and served statically",
+      "Execution blocked by open_basedir or disable_functions",
+      "CDN serves uploads from a sandbox domain that never executes code"
+    ]
+  }
+}

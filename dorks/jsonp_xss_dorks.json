@@ -1,0 +1,22 @@
+{
+  "jsonp_xss_dorks": [
+    "inurl:callback=",
+    "inurl:jsonp=",
+    "inurl:jsonpcallback=",
+    "inurl:cb=",
+    "inurl:jsoncallback=",
+    "inurl:callback",
+    "inurl:format=json",
+    "inurl:api?callback=",
+    "inurl:json?callback=",
+    "inurl:jsonp?callback=",
+    "inurl:get?callback=",
+    "inurl:data?callback=",
+    "inurl:search?callback=",
+    "inurl:widget?callback=",
+    "inurl:feed?callback=",
+    "inurl:api/json",
+    "inurl:json-api",
+    "inurl:output=json"
+  ]
+}

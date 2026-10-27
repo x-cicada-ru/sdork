@@ -1,0 +1,32 @@
+{
+  "open_redirect_dorks": [
+    "inurl:redirect=",
+    "inurl:redirect?url=",
+    "inurl:redir=",
+    "inurl:url=",
+    "inurl:return=",
+    "inurl:returnUrl=",
+    "inurl:returnUri=",
+    "inurl:return_url=",
+    "inurl:next=",
+    "inurl:continue=",
+    "inurl:dest=",
+    "inurl:destination=",
+    "inurl:go=",
+    "inurl:goTo=",
+    "inurl:goto=",
+    "inurl:out=",
+    "inurl:link=",
+    "inurl:target=",
+    "inurl:redirect_uri=",
+    "inurl:callback=",
+    "inurl:forward=",
+    "inurl:location=",
+    "inurl:locationUrl=",
+    "inurl:view=",
+    "inurl:r_url=",
+    "inurl:checkout=",
+    "inurl:exit=",
+    "inurl:domain="
+  ]
+}

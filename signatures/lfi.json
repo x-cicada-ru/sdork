@@ -1,0 +1,83 @@
+{
+  "lfi": {
+    "payload_ref": "payloads/lfi.json",
+    "injection": ["query", "body", "path"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "lfi_passwd",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?m)^root:[^:]*:0:0:",
+        "confidence": "high",
+        "technique": "path_traversal",
+        "note": "Contents of /etc/passwd returned"
+      },
+      {
+        "id": "lfi_passwd_alt",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(root:/bin/(ba)?sh|daemon:/usr/sbin/nologin|nobody:/nonexistent)",
+        "confidence": "high",
+        "technique": "path_traversal",
+        "note": "passwd entries returned (partial or filtered read)"
+      },
+      {
+        "id": "lfi_winini",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)\\[boot loader\\]|; for 16-bit app support|\\[fonts\\]\\s*\\[extensions\\]",
+        "confidence": "high",
+        "technique": "path_traversal",
+        "note": "Windows win.ini contents returned"
+      },
+      {
+        "id": "lfi_proc_environ",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(DOCUMENT_ROOT=|HTTP_USER_AGENT=|SCRIPT_FILENAME=|PATH=/usr)",
+        "confidence": "high",
+        "technique": "proc_self",
+        "note": "Process environment leaked via /proc/self/environ"
+      },
+      {
+        "id": "lfi_php_filter_base64",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)<\\?php",
+        "transform": "base64_decode",
+        "confidence": "high",
+        "technique": "php_filter",
+        "note": "Base64 body decodes to PHP source (php://filter)"
+      },
+      {
+        "id": "lfi_php_warning",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(failed to open stream|open_basedir restriction in effect|include_path=|allow_url_include|failed opening required)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Traversal reached the filesystem but the read failed; confirms the sink"
+      },
+      {
+        "id": "lfi_ssh_key",
+        "source": "body",
+        "match": "regex",
+        "pattern": "BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY",
+        "confidence": "high",
+        "technique": "path_traversal",
+        "note": "Private key file read"
+      }
+    ],
+    "preconditions": [
+      "Use php://filter base64 payloads on PHP targets to avoid execution side effects",
+      "Response must not be a generic error page"
+    ],
+    "false_positive_hints": [
+      "Page/documentation contains passwd-like examples",
+      "The app returns a cached or fallback page",
+      "open_basedir blocked the read (warning is only a sink indicator)",
+      "WAF/filter rewrote the traversal sequence"
+    ]
+  }
+}

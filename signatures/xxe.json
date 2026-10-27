@@ -1,0 +1,82 @@
+{
+  "xxe": {
+    "payload_ref": "payloads/xxe.json",
+    "injection": ["body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "xxe_passwd",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?m)^root:[^:]*:0:0:",
+        "confidence": "high",
+        "technique": "file_disclosure",
+        "note": "External entity resolved to /etc/passwd"
+      },
+      {
+        "id": "xxe_winini",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)\\[boot loader\\]|; for 16-bit app support",
+        "confidence": "high",
+        "technique": "file_disclosure",
+        "note": "External entity resolved to win.ini"
+      },
+      {
+        "id": "xxe_oob_dns",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "XML parser resolved an attacker-controlled DTD/hostname"
+      },
+      {
+        "id": "xxe_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "XML parser fetched an external entity/DTD"
+      },
+      {
+        "id": "xxe_aws_metadata",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(ami-id|instance-id|iam/security-credentials|AccessKeyId|SecretAccessKey)",
+        "confidence": "high",
+        "technique": "ssrf_via_xxe",
+        "note": "Entity fetched cloud instance metadata"
+      },
+      {
+        "id": "xxe_parser_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(DOCTYPE|ENTITY|External Entity|SAXParseException|XMLReader|DocumentBuilder|org\\.xml\\.sax|javax\\.xml|libxml)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Parser error references DTD/entities; confirms parser reached the payload"
+      },
+      {
+        "id": "xxe_entity_load_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(failed to load external entity|error loading .*dtd|external entity.*not allowed|entity .* not defined)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Parser attempted to load the external entity"
+      }
+    ],
+    "preconditions": [
+      "Request body must be parsed as XML by the backend",
+      "A callback/DNS server is required for blind XXE"
+    ],
+    "false_positive_hints": [
+      "Generic XML validation errors unrelated to entities",
+      "DOCTYPE disabled by the parser (no fetch occurred)",
+      "WAF blocked and echoed the XML body",
+      "The XML is parsed client-side only"
+    ]
+  }
+}

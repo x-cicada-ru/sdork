@@ -1,0 +1,24 @@
+{
+  "backup_dorks": [
+    "intitle:\"index of\" \"customers.sql\" OR \"accounts.sql\" OR \"credentials.sql\"",
+    "intitle:\"index of\" (ext:bak | ext:old | ext:backup | ext:bkp)",
+    "intitle:\"index of\" (ext:sql | ext:dump)",
+    "intitle:\"index of\" (\"backup\" | \"bak\" | \"old\")",
+    "inurl:backup (ext:sql | ext:zip | ext:rar | ext:tar.gz)",
+    "inurl:backup (ext:bak | ext:old | ext:backup)",
+    "ext:bak | ext:old | ext:backup | ext:bkp",
+    "ext:sql \"insert into\"",
+    "ext:dump",
+    "inurl:wp-config (ext:bak | ext:old | ext:txt)",
+    "inurl:config (ext:bak | ext:old)",
+    "intitle:\"index of\" \".htaccess.bak\"",
+    "intitle:\"index of\" \".htaccess.old\"",
+    "inurl:backup.zip | inurl:backup.rar | inurl:backup.tar.gz",
+    "inurl:database.sql | inurl:dump.sql",
+    "intitle:\"index of\" (\"backup\" | \"dump\") (ext:sql | ext:zip | ext:rar)",
+    "intitle:\"index of\" \"database.sql\" OR \"db.sql\" OR \"users.sql\"",
+    "intitle:\"index of\" \"backup.sql\" OR \"dump.sql\" OR \"data.sql\"",
+    "intitle:\"index of\" \"database.zip\" OR \"backup.zip\" OR \"site.zip\"",
+    "intitle:\"index of\" \"db_backup.sql\" OR \"database_backup.sql\" OR \"backup_db.sql\""
+  ]
+}

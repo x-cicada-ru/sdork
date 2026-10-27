@@ -1,0 +1,28 @@
+{
+  "idor_dorks": [
+    "inurl:id=",
+    "inurl:user_id=",
+    "inurl:account_id=",
+    "inurl:order_id=",
+    "inurl:invoice_id=",
+    "inurl:document_id=",
+    "inurl:file_id=",
+    "inurl:profile_id=",
+    "inurl:uid=",
+    "inurl:pid=",
+    "inurl:cid=",
+    "inurl:oid=",
+    "inurl:ticket_id=",
+    "inurl:message_id=",
+    "inurl:customer_id=",
+    "inurl:booking_id=",
+    "inurl:api/v1/users/",
+    "inurl:api/users/",
+    "inurl:api/v1/orders/",
+    "inurl:api/orders/",
+    "inurl:api/v1/accounts/",
+    "inurl:account/settings",
+    "inurl:profile?id=",
+    "inurl:download?file="
+  ]
+}

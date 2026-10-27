@@ -1,0 +1,26 @@
+{
+  "file_upload_dorks": [
+    "inurl:upload",
+    "inurl:upload.php",
+    "inurl:uploadfile",
+    "inurl:fileupload",
+    "inurl:uploader",
+    "inurl:attachment",
+    "inurl:attachments",
+    "inurl:avatar",
+    "inurl:photo",
+    "inurl:image",
+    "inurl:document",
+    "inurl:media",
+    "inurl:import",
+    "inurl:attach",
+    "inurl:files",
+    "inurl:gallery",
+    "inurl:profile/upload",
+    "inurl:admin/upload",
+    "inurl:api/upload",
+    "inurl:api/files",
+    "inurl:upload/photo",
+    "inurl:upload/image"
+  ]
+}

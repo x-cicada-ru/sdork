@@ -1,0 +1,63 @@
+{
+  "crlf": {
+    "payload_ref": "payloads/crlf.json",
+    "injection": ["query", "header", "path"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "crlf_set_cookie",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^set-cookie:\\s*session=attacker",
+        "confidence": "high",
+        "technique": "header_injection",
+        "note": "Injected Set-Cookie header present in the parsed response"
+      },
+      {
+        "id": "crlf_location",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^location:\\s*.*evil\\.com",
+        "confidence": "high",
+        "technique": "header_injection",
+        "note": "Injected/modified Location header"
+      },
+      {
+        "id": "crlf_response_split",
+        "source": "raw_response",
+        "match": "regex",
+        "pattern": "(?s)\\r\\n\\r\\nHTTP/1\\.[01]\\s+200\\s+OK",
+        "confidence": "high",
+        "technique": "response_splitting",
+        "note": "Second HTTP response body injected (raw response required)"
+      },
+      {
+        "id": "crlf_injected_header_raw",
+        "source": "raw_response",
+        "match": "regex",
+        "pattern": "(?im)^(set-cookie|location|content-length):\\s*[^\\r\\n]*(attacker|evil\\.com)",
+        "confidence": "high",
+        "technique": "header_injection",
+        "note": "Injected header visible in the raw response"
+      },
+      {
+        "id": "crlf_body_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "Set-Cookie: session=attacker",
+        "confidence": "medium",
+        "technique": "reflected",
+        "note": "Header text reflected in the body; not exploitable by itself"
+      }
+    ],
+    "preconditions": [
+      "Raw HTTP response is required to see actual header boundaries",
+      "Target must reflect the parameter into a response header"
+    ],
+    "false_positive_hints": [
+      "Server strips CR/LF characters",
+      "Proxy normalizes headers",
+      "Header text appears only in the HTML body, not in real headers"
+    ]
+  }
+}

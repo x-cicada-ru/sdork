@@ -1,0 +1,26 @@
+{
+  "header_injection_dorks": [
+    "inurl:email=",
+    "inurl:subject=",
+    "inurl:name=",
+    "inurl:redirect=",
+    "inurl:url=",
+    "inurl:return=",
+    "inurl:next=",
+    "inurl:host=",
+    "inurl:domain=",
+    "inurl:lang=",
+    "inurl:locale=",
+    "inurl:callback=",
+    "inurl:webhook=",
+    "inurl:contact=",
+    "inurl:feedback=",
+    "inurl:subscribe=",
+    "inurl:contact.php",
+    "inurl:feedback.php",
+    "inurl:subscribe.php",
+    "inurl:newsletter",
+    "inurl:api/contact",
+    "inurl:api/feedback"
+  ]
+}

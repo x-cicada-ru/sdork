@@ -1,0 +1,16 @@
+{
+  "code_injection": [
+    "phpinfo%28%29",
+    "system%28%27id%27%29",
+    "eval%28%27id%27%29",
+    "assert%28%27id%27%29",
+    "passthru%28%27id%27%29",
+    "shell_exec%28%27id%27%29",
+    "popen%28%27id%27%2C%27r%27%29",
+    "call_user_func%28%27system%27%2C%27id%27%29",
+    "create_function%28%27%27%2C%27system%28%27id%27%29%3B%27%29",
+    "__construct",
+    "__destruct",
+    "__wakeup"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "xxe_dorks": [
+    "inurl:xml",
+    "inurl:wsdl",
+    "inurl:soap",
+    "inurl:api/xml",
+    "inurl:xmlrpc",
+    "inurl:import",
+    "inurl:feed",
+    "inurl:rss",
+    "inurl:sitemap",
+    "inurl:parse",
+    "inurl:transform",
+    "inurl:xslt",
+    "inurl:report",
+    "inurl:invoice",
+    "inurl:export",
+    "inurl:upload?xml",
+    "inurl:api/soap",
+    "inurl:service?wsdl",
+    "inurl:xml?file=",
+    "inurl:xml?url=",
+    "inurl:xml?data=",
+    "inurl:xml?input="
+  ]
+}

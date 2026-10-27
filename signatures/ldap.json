@@ -1,0 +1,68 @@
+{
+  "ldap": {
+    "payload_ref": "payloads/ldap.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "ldap_exception",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(LDAPException|ldap_(search|bind|connect|errno)|Invalid DN syntax|javax\\.naming\\.(directory|ldap)|Protocol error|OperationsError|invalidCredentials|LDAP result code)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "LDAP library error disclosed"
+      },
+      {
+        "id": "ldap_filter_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(bad search filter|invalid filter|filter.*syntax error|unbalanced parenthesis.*filter)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "LDAP filter parser rejected/executed the injected filter"
+      },
+      {
+        "id": "ldap_auth_bypass",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(dashboard|logout|welcome|my account|profile|sign out)",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "auth_bypass",
+        "note": "Authenticated UI appeared with a wildcard/tautology filter"
+      },
+      {
+        "id": "ldap_status_bypass",
+        "source": "status",
+        "match": "in",
+        "values": [200, 302],
+        "requires": ["baseline"],
+        "confidence": "low",
+        "technique": "auth_bypass",
+        "note": "Status changed vs failed-login baseline; must be paired with a success marker"
+      },
+      {
+        "id": "ldap_response_diff",
+        "source": "body",
+        "match": "diff",
+        "against": "control_payload",
+        "min_delta_percent": 15,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "boolean_blind",
+        "note": "Blind LDAP injection changes the response consistently"
+      }
+    ],
+    "preconditions": [
+      "Login/search must be backed by LDAP",
+      "Use a failed-login control to compare status and content"
+    ],
+    "false_positive_hints": [
+      "Login page mentions LDAP in help text",
+      "Generic authentication error for every payload",
+      "WAF or rate limiting",
+      "Directory service errors unrelated to the injected filter"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "ssti_dorks": [
+    "inurl:name=",
+    "inurl:q=",
+    "inurl:search=",
+    "inurl:template=",
+    "inurl:page=",
+    "inurl:view=",
+    "inurl:content=",
+    "inurl:message=",
+    "inurl:subject=",
+    "inurl:title=",
+    "inurl:comment=",
+    "inurl:lang=",
+    "inurl:locale=",
+    "inurl:theme=",
+    "inurl:email=",
+    "inurl:username=",
+    "inurl:render",
+    "inurl:preview",
+    "inurl:report",
+    "inurl:invoice",
+    "inurl:email-template",
+    "inurl:notification"
+  ]
+}

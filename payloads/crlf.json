@@ -1,0 +1,8 @@
+{
+  "crlf": [
+    "%0d%0aSet-Cookie%3A%20session%3Dattacker",
+    "%0d%0aLocation%3A%20https%3A%2F%2Fevil.com",
+    "%0d%0aContent-Length%3A%200%0d%0a%0d%0aHTTP%2F1.1%20200%20OK",
+    "%0aSet-Cookie%3A%20session%3Dattacker"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "host_header_injection": {
+    "payload_ref": "payloads/host_header_injection.json",
+    "injection": ["header"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "hhi_location",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^location:\\s*(https?:)?//evil\\.com",
+        "confidence": "high",
+        "technique": "host_reflection",
+        "note": "Location header derived from the injected Host value"
+      },
+      {
+        "id": "hhi_absolute_url",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(href|src|action|formaction)\\s*=\\s*[\"']https?://evil\\.com",
+        "confidence": "high",
+        "technique": "host_reflection",
+        "note": "Absolute URL in HTML built from the injected Host"
+      },
+      {
+        "id": "hhi_reset_link",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)https?://evil\\.com[^\\s\"'<>]*(reset|token|confirm|verify|password)",
+        "requires": ["account_flow"],
+        "confidence": "high",
+        "technique": "password_reset_poisoning",
+        "note": "Reset/verification link uses the attacker host"
+      },
+      {
+        "id": "hhi_forwarded_host_echo",
+        "source": "body",
+        "match": "contains",
+        "value": "evil.com",
+        "confidence": "medium",
+        "technique": "host_reflection",
+        "note": "Injected host reflected in the page; verify it affects links/redirects"
+      },
+      {
+        "id": "hhi_cache_indicator",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^(x-cache|cf-cache-status|age|x-varnish):\\s*(hit|HIT|\\d+)",
+        "requires": ["cache_probe"],
+        "confidence": "low",
+        "technique": "cache_poisoning",
+        "note": "Cached response observed; combine with reflected host to confirm poisoning"
+      },
+      {
+        "id": "hhi_vhost_switch",
+        "source": "length",
+        "match": "diff",
+        "against": "valid_host_control",
+        "min_delta_percent": 20,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "vhost_routing",
+        "note": "Different virtual host served for the injected Host"
+      }
+    ],
+    "preconditions": [
+      "Test X-Forwarded-Host, X-Host and absolute-URI variants as well",
+      "Password reset confirmation requires triggering an email"
+    ],
+    "false_positive_hints": [
+      "Host allowlist silently falls back to the canonical host",
+      "Reflected value is escaped or only appears in a static example",
+      "CDN/WAF normalizes the Host header",
+      "Cached page unrelated to the injected request"
+    ]
+  }
+}

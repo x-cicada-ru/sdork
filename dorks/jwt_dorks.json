@@ -1,0 +1,24 @@
+{
+  "jwt_dorks": [
+    "inurl:token=",
+    "inurl:access_token=",
+    "inurl:id_token=",
+    "inurl:jwt=",
+    "inurl:authorization=",
+    "inurl:bearer=",
+    "inurl:api_token=",
+    "inurl:auth=",
+    "inurl:oauth=",
+    "inurl:callback?code=",
+    "inurl:login?code=",
+    "inurl:sso=",
+    "inurl:graphql",
+    "inurl:api/v1",
+    "inurl:api/v2",
+    "inurl:me",
+    "inurl:userinfo",
+    "inurl:profile",
+    "inurl:admin/api",
+    "inurl:dashboard"
+  ]
+}

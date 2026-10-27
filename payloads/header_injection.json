@@ -1,0 +1,14 @@
+{
+  "header_injection": [
+    "%0d%0aBcc%3Aattacker%40evil.com",
+    "%0aSubject%3Ainjected",
+    "%0d%0aSet-Cookie%3A%20session%3Dattacker",
+    "evil.com",
+    "evil.com%3A80",
+    "evil.com%40legit.com",
+    "legit.com.evil.com",
+    "127.0.0.1",
+    "localhost",
+    "evil.com%00legit.com"
+  ]
+}

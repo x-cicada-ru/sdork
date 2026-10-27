@@ -1,0 +1,26 @@
+{
+  "crlf_dorks": [
+    "inurl:url=",
+    "inurl:next=",
+    "inurl:redirect=",
+    "inurl:return=",
+    "inurl:returnUrl=",
+    "inurl:lang=",
+    "inurl:locale=",
+    "inurl:page=",
+    "inurl:file=",
+    "inurl:name=",
+    "inurl:email=",
+    "inurl:subject=",
+    "inurl:host=",
+    "inurl:domain=",
+    "inurl:callback=",
+    "inurl:path=",
+    "inurl:redirect?url=",
+    "inurl:login?next=",
+    "inurl:logout?next=",
+    "inurl:auth?return=",
+    "inurl:continue=",
+    "inurl:dest="
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "deserialization_dorks": [
+    "inurl:data=",
+    "inurl:state=",
+    "inurl:session=",
+    "inurl:token=",
+    "inurl:object=",
+    "inurl:view=",
+    "inurl:format=",
+    "inurl:serialize=",
+    "inurl:deserialize=",
+    "inurl:load=",
+    "inurl:import=",
+    "inurl:export=",
+    "inurl:cache=",
+    "inurl:payload=",
+    "inurl:input=",
+    "inurl:jsessionid=",
+    "inurl:viewstate=",
+    "inurl:__viewstate=",
+    "inurl:api/import",
+    "inurl:api/export"
+  ]
+}

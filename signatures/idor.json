@@ -1,0 +1,70 @@
+{
+  "idor": {
+    "payload_ref": "payloads/idor.json",
+    "injection": ["query", "path", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "idor_cross_account_data",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)\"(email|phone|address|iban|card|ssn|passport|account_id|user_id|owner_id)\"\\s*:",
+        "requires": ["two_identities"],
+        "confidence": "high",
+        "technique": "horizontal",
+        "note": "Object belongs to another user but sensitive fields are returned"
+      },
+      {
+        "id": "idor_status_mismatch",
+        "source": "status",
+        "match": "in",
+        "values": [200, 201],
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "horizontal",
+        "note": "Other users' IDs return 200 while a random ID returns 403/404"
+      },
+      {
+        "id": "idor_enumeration",
+        "source": "body",
+        "match": "diff",
+        "against": "adjacent_id",
+        "min_delta_percent": 10,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "horizontal",
+        "note": "Sequential IDs return distinct valid records"
+      },
+      {
+        "id": "idor_success_marker",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"success\"\\s*:\\s*true|\"status\"\\s*:\\s*\"(ok|success)\"|record found)",
+        "requires": ["baseline"],
+        "confidence": "low",
+        "technique": "horizontal",
+        "note": "Generic success marker; must be tied to foreign object access"
+      },
+      {
+        "id": "idor_privilege_change",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"role\"|\"is_admin\"|\"isAdmin\"|\"permissions\")\\s*:\\s*(true|\"admin\"|\"admin\")",
+        "requires": ["second_identity"],
+        "confidence": "high",
+        "technique": "vertical",
+        "note": "Privilege fields controllable via the object ID surface"
+      }
+    ],
+    "preconditions": [
+      "Two authenticated identities are required to prove cross-account access",
+      "Capture own-object baseline response for comparison"
+    ],
+    "false_positive_hints": [
+      "Objects are intentionally public",
+      "Soft-deleted/empty objects returning 200 with no data",
+      "Same user accessing own data with a different ID",
+      "Cached response unrelated to the tested ID"
+    ]
+  }
+}

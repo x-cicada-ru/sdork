@@ -1,0 +1,24 @@
+{
+  "format_string_dorks": [
+    "inurl:name=",
+    "inurl:message=",
+    "inurl:msg=",
+    "inurl:text=",
+    "inurl:title=",
+    "inurl:subject=",
+    "inurl:format=",
+    "inurl:template=",
+    "inurl:lang=",
+    "inurl:locale=",
+    "inurl:debug=",
+    "inurl:log=",
+    "inurl:search=",
+    "inurl:q=",
+    "inurl:query=",
+    "inurl:email=",
+    "inurl:comment=",
+    "inurl:feedback=",
+    "inurl:contact=",
+    "inurl:api/log"
+  ]
+}

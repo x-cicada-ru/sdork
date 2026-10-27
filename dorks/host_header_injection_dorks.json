@@ -1,0 +1,24 @@
+{
+  "host_header_injection_dorks": [
+    "inurl:reset",
+    "inurl:password-reset",
+    "inurl:forgot",
+    "inurl:login",
+    "inurl:signin",
+    "inurl:auth",
+    "inurl:sso",
+    "inurl:invite",
+    "inurl:verify",
+    "inurl:confirm",
+    "inurl:callback",
+    "inurl:webhook",
+    "inurl:redirect",
+    "inurl:checkout",
+    "inurl:payment",
+    "inurl:password/reset",
+    "inurl:account/verify",
+    "inurl:account/confirm",
+    "inurl:api/auth",
+    "inurl:api/password"
+  ]
+}

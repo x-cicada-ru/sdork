@@ -1,0 +1,79 @@
+{
+  "nosqli": {
+    "payload_ref": "payloads/nosqli.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "nosqli_auth_bypass",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(dashboard|logout|welcome|my account|profile|sign out)",
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "auth_bypass",
+        "note": "Operator injection bypassed authentication"
+      },
+      {
+        "id": "nosqli_status_bypass",
+        "source": "status",
+        "match": "in",
+        "values": [200, 302],
+        "requires": ["baseline"],
+        "confidence": "low",
+        "technique": "auth_bypass",
+        "note": "Status differs from failed-login baseline; corroborate with content"
+      },
+      {
+        "id": "nosqli_mongo_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(MongoError|MongoServerError|CastError|BSONTypeError|unknown operator|\\$where|E11000 duplicate key|ValidationError.*(cast|bson))",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "MongoDB/driver error disclosed"
+      },
+      {
+        "id": "nosqli_time_delay",
+        "source": "time",
+        "match": "delta",
+        "threshold_ms": 4500,
+        "repeats": 3,
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "time_based",
+        "note": "$where/sleep injection delays the response"
+      },
+      {
+        "id": "nosqli_response_diff",
+        "source": "body",
+        "match": "diff",
+        "against": "control_payload",
+        "min_delta_percent": 15,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "boolean_blind",
+        "note": "$ne/$gt/$regex changes the result set consistently"
+      },
+      {
+        "id": "nosqli_json_operator_echo",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\\$ne|\\$gt|\\$regex|\\$where|\\$exists).{0,40}(true|false|error|invalid)",
+        "confidence": "low",
+        "technique": "error_based",
+        "note": "Operator echoed in error output; weak indicator"
+      }
+    ],
+    "preconditions": [
+      "Backend uses MongoDB and accepts JSON/object query parameters",
+      "Compare against a failed-login control request"
+    ],
+    "false_positive_hints": [
+      "Generic login success page for any input",
+      "Application returns 200 for the login form regardless",
+      "Mongo errors caused by malformed JSON, not operator injection",
+      "Rate limiting or account lockout"
+    ]
+  }
+}

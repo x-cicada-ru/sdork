@@ -1,0 +1,56 @@
+{
+  "rfi": {
+    "payload_ref": "payloads/rfi.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "rfi_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Target fetched the attacker-controlled remote file"
+      },
+      {
+        "id": "rfi_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "RFI_OK",
+        "requires": ["controlled_remote_file"],
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "Remote file content included in the response (host a file containing RFI_OK)"
+      },
+      {
+        "id": "rfi_wrapper_disabled",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(allow_url_include|URL file-access is disabled|http:// wrapper is disabled|remote file inclusion is disabled)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Include sink reached the URL wrapper but inclusion was blocked"
+      },
+      {
+        "id": "rfi_http_failed",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(failed to open stream: HTTP request failed|failed opening .*https?://|include\\(\\).*http)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "PHP attempted an outbound HTTP include"
+      }
+    ],
+    "preconditions": [
+      "A controlled remote file must be reachable from the target",
+      "Monitor the callback server for the exact request path/token"
+    ],
+    "false_positive_hints": [
+      "Callback hit caused by URL preview/unfurl instead of include",
+      "WAF blocked and echoed the URL",
+      "allow_url_include is off (only a sink indicator)",
+      "Cached response from a previous test"
+    ]
+  }
+}

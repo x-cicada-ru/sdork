@@ -1,0 +1,27 @@
+{
+  "xpath_dorks": [
+    "inurl:username=",
+    "inurl:user=",
+    "inurl:login=",
+    "inurl:uid=",
+    "inurl:cn=",
+    "inurl:mail=",
+    "inurl:email=",
+    "inurl:node=",
+    "inurl:xpath=",
+    "inurl:select=",
+    "inurl:category=",
+    "inurl:filter=",
+    "inurl:query=",
+    "inurl:search=",
+    "inurl:doc=",
+    "inurl:file=",
+    "inurl:path=",
+    "inurl:page=",
+    "inurl:item=",
+    "inurl:product=",
+    "inurl:wsdl",
+    "inurl:soap",
+    "inurl:xml"
+  ]
+}

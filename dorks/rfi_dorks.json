@@ -1,0 +1,26 @@
+{
+  "rfi_dorks": [
+    "inurl:file=",
+    "inurl:page=",
+    "inurl:include=",
+    "inurl:path=",
+    "inurl:template=",
+    "inurl:view=",
+    "inurl:load=",
+    "inurl:doc=",
+    "inurl:folder=",
+    "inurl:root=",
+    "inurl:lang=",
+    "inurl:locale=",
+    "inurl:theme=",
+    "inurl:module=",
+    "inurl:content=",
+    "inurl:inc=",
+    "inurl:pg=",
+    "inurl:php?file=",
+    "inurl:index.php?page=",
+    "inurl:index.php?include=",
+    "inurl:main.php?page=",
+    "inurl:view.php?file="
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "logic_bypass": [
+    "delete",
+    "drop",
+    "admin",
+    "reset",
+    "update",
+    "create",
+    "backup",
+    "export",
+    "import"
+  ]
+}

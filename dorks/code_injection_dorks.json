@@ -1,0 +1,26 @@
+{
+  "code_injection_dorks": [
+    "inurl:calc=",
+    "inurl:eval=",
+    "inurl:exec=",
+    "inurl:execute=",
+    "inurl:code=",
+    "inurl:expression=",
+    "inurl:expr=",
+    "inurl:formula=",
+    "inurl:math=",
+    "inurl:func=",
+    "inurl:function=",
+    "inurl:method=",
+    "inurl:action=",
+    "inurl:do=",
+    "inurl:run=",
+    "inurl:process=",
+    "inurl:cmd=",
+    "inurl:command=",
+    "inurl:script=",
+    "inurl:query=",
+    "inurl:api/run",
+    "inurl:api/execute"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "open_redirect": {
+    "payload_ref": "payloads/open_redirect.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "open_redirect_location",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^location:\\s*(https?:)?//evil\\.com",
+        "confidence": "high",
+        "technique": "header_redirect",
+        "note": "Location header points to the attacker host"
+      },
+      {
+        "id": "open_redirect_location_scheme",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^location:\\s*(https?:evil\\.com|//evil\\.com|\\\\/?evil\\.com)",
+        "confidence": "high",
+        "technique": "header_redirect",
+        "note": "Scheme-relative or backslash redirect bypass"
+      },
+      {
+        "id": "open_redirect_js",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(window\\.location|location\\.href|location\\.replace)\\s*=\\s*[\"'][^\"']*evil\\.com",
+        "confidence": "high",
+        "technique": "client_redirect",
+        "note": "JavaScript redirect to the attacker host"
+      },
+      {
+        "id": "open_redirect_meta",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)<meta[^>]+http-equiv=[\"']?refresh[^>]+url\\s*=\\s*[^>]*evil\\.com",
+        "confidence": "high",
+        "technique": "meta_refresh",
+        "note": "Meta refresh redirect to the attacker host"
+      },
+      {
+        "id": "open_redirect_external_location",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^location:\\s*https?://(?!(www\\.)?<target_host>(?::\\d+)?(?:[/?#]|$))",
+        "requires": ["target_host_allowlist"],
+        "confidence": "medium",
+        "technique": "header_redirect",
+        "note": "Replace <target_host> with the allowed host; any external Location is suspicious"
+      },
+      {
+        "id": "open_redirect_status",
+        "source": "status",
+        "match": "in",
+        "values": [301, 302, 303, 307, 308],
+        "confidence": "low",
+        "technique": "header_redirect",
+        "note": "Redirect status alone is not a finding; must combine with an external Location"
+      }
+    ],
+    "preconditions": [
+      "Location host must be external and not present in the app allowlist",
+      "Follow redirects manually (disable auto-follow) to inspect the first response"
+    ],
+    "false_positive_hints": [
+      "Legitimate OAuth/SSO allowlisted domains",
+      "Relative paths or same-origin redirects",
+      "Login flows redirecting to a fixed page",
+      "WAF echo pages"
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "info_disclosure": {
+    "payload_ref": "payloads/info_disclosure.json",
+    "injection": ["path", "query"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "info_stack_trace",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(Traceback \\(most recent call last\\)|at [a-z0-9_.]+\\.[A-Za-z0-9_]+\\([A-Za-z0-9_]+\\.java:\\d+\\)|Fatal error:|Warning: .* on line \\d+|Notice: Undefined|Stack trace:|Unhandled exception)",
+        "confidence": "high",
+        "technique": "debug_output",
+        "note": "Stack trace / debug output disclosed"
+      },
+      {
+        "id": "info_env_secrets",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(APP_KEY=|DB_PASSWORD=|DB_PASS=|AWS_SECRET_ACCESS_KEY|aws_secret_access_key|BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY|api[_-]?key\\s*[:=]\\s*[A-Za-z0-9_\\-]{16,}|secret[_-]?key\\s*[:=])",
+        "confidence": "high",
+        "technique": "secret_exposure",
+        "note": "Credentials or private keys exposed"
+      },
+      {
+        "id": "info_git",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(ref: refs/heads/|\\[core\\]\\s*repositoryformatversion|gitdir:)",
+        "confidence": "high",
+        "technique": "vcs_exposure",
+        "note": ".git internals readable"
+      },
+      {
+        "id": "info_directory_listing",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(<title>Index of /|Directory listing for /|\\[To Parent Directory\\])",
+        "confidence": "high",
+        "technique": "directory_listing",
+        "note": "Directory listing enabled"
+      },
+      {
+        "id": "info_phpinfo",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(PHP Version =>|phpinfo\\(\\)|Apache Server Status|server-status|Server Configuration.*php\\.ini)",
+        "confidence": "high",
+        "technique": "debug_output",
+        "note": "phpinfo()/server status page exposed"
+      },
+      {
+        "id": "info_backup_dump",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(-- MySQL dump|CREATE TABLE .*ENGINE=|INSERT INTO .* VALUES|pg_dump|sqlite format 3)",
+        "confidence": "high",
+        "technique": "backup_exposure",
+        "note": "Database dump served as content"
+      },
+      {
+        "id": "info_env_file",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?im)^(APP_ENV|APP_DEBUG|DB_HOST|DB_USERNAME|REDIS_HOST|MAIL_HOST|JWT_SECRET)\\s*=",
+        "confidence": "high",
+        "technique": "config_exposure",
+        "note": ".env/config file served"
+      },
+      {
+        "id": "info_headers",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^(server|x-powered-by|x-aspnet-version|x-generator|x-drupal-cache|via):",
+        "confidence": "low",
+        "technique": "version_disclosure",
+        "note": "Version banner only; informational, not exploitable alone"
+      }
+    ],
+    "preconditions": [
+      "Verify the exposed data is live, not a documentation example",
+      "Check that the file is actually served with valid syntax"
+    ],
+    "false_positive_hints": [
+      "Public documentation/example configs",
+      "Fake/placeholder secrets (test keys, example values)",
+      "Error pages that reveal nothing beyond a generic message",
+      "Cached or CDN-served static copies"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "code_injection": {
+    "payload_ref": "payloads/code_injection.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "code_injection_phpinfo",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(PHP Version =>|Configuration File \\(php\\.ini\\) Path|allow_url_fopen|display_errors)",
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "phpinfo() output returned"
+      },
+      {
+        "id": "code_injection_uid",
+        "source": "body",
+        "match": "regex",
+        "pattern": "uid=\\d+\\([a-z0-9_.-]+\\)\\s+gid=\\d+",
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "system()/passthru() executed a command"
+      },
+      {
+        "id": "code_injection_eval_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(eval\\(\\)'d code|assert\\(\\)|Fatal error: Uncaught|ParseError|create_function\\(\\)|unexpected (token|T_))",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Interpreter evaluated the injected code and failed"
+      },
+      {
+        "id": "code_injection_oob",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Injected code fetched an attacker-controlled URL"
+      },
+      {
+        "id": "code_injection_deserial_clue",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(__wakeup|__destruct|__construct|call_user_func|Object of class|Cannot instantiate)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Magic method / callable hint leaked in error output"
+      },
+      {
+        "id": "code_injection_ssrf_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "PHPRC",
+        "confidence": "low",
+        "technique": "in_band",
+        "note": "Weak environment marker; corroborate with a unique output"
+      }
+    ],
+    "preconditions": [
+      "Prefer non-destructive payloads (phpinfo, id) over shells",
+      "Compare with a control request to exclude static pages"
+    ],
+    "false_positive_hints": [
+      "Documentation pages about PHP functions",
+      "Generic PHP syntax errors from input parsing, not eval",
+      "WAF echoing the payload",
+      "Errors from a templating engine evaluated elsewhere"
+    ]
+  }
+}

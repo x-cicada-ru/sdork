@@ -1,0 +1,8 @@
+{
+  "session_fixation": [
+    "attacker_session_id",
+    "1",
+    "admin",
+    "0000"
+  ]
+}

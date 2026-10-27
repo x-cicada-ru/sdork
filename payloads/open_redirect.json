@@ -1,0 +1,17 @@
+{
+  "open_redirect": [
+    "https%3A%2F%2Fevil.com",
+    "%2F%2Fevil.com",
+    "%2F%2F%2F%2Fevil.com",
+    "%2F%5Cevil.com",
+    "\\evil.com",
+    "\\/evil.com",
+    "https%3Aevil.com",
+    "https%3A%2F%2Fevil.com%2F%252F..",
+    "https%3A%2F%2Fsite.com%40evil.com",
+    "https%3A%2F%2Fevil.com%23site.com",
+    "https%3A%2F%2Fevil.com%3Fsite.com",
+    "https%3A%2F%2Fevil.com%00site.com",
+    "https%3A%2F%2F%D0%B5vil.com"
+  ]
+}

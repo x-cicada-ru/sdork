@@ -1,0 +1,28 @@
+{
+  "nosqli_dorks": [
+    "inurl:username=",
+    "inurl:user=",
+    "inurl:login=",
+    "inurl:email=",
+    "inurl:password=",
+    "inurl:pass=",
+    "inurl:pwd=",
+    "inurl:account=",
+    "inurl:user_id=",
+    "inurl:uid=",
+    "inurl:token=",
+    "inurl:api_key=",
+    "inurl:apikey=",
+    "inurl:filter=",
+    "inurl:where=",
+    "inurl:query=",
+    "inurl:search=",
+    "inurl:q=",
+    "inurl:json=",
+    "inurl:login.php",
+    "inurl:signin",
+    "inurl:api/login",
+    "inurl:graphql",
+    "inurl:api/v1"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "jwt": {
+    "payload_ref": "payloads/jwt.json",
+    "injection": ["header", "cookie", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "jwt_alg_none_accepted",
+        "source": "status",
+        "match": "in",
+        "values": [200, 201, 204],
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "alg_none",
+        "note": "Unsigned alg:none token accepted on a protected endpoint (compare with no-token baseline)"
+      },
+      {
+        "id": "jwt_claim_tamper_accepted",
+        "source": "status",
+        "match": "in",
+        "values": [200, 201, 204],
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "claim_tampering",
+        "note": "Token with modified role/sub claim accepted after signature removal or key confusion"
+      },
+      {
+        "id": "jwt_expired_accepted",
+        "source": "status",
+        "match": "in",
+        "values": [200, 201, 204],
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "expiry_bypass",
+        "note": "Expired token still authorized"
+      },
+      {
+        "id": "jwt_kid_traversal",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?im)^root:[^:]*:0:0:|(failed to open stream|no such file|KeyStore|key not found)",
+        "confidence": "high",
+        "technique": "kid_injection",
+        "note": "kid path traversal/SSRF reached the filesystem or key loader"
+      },
+      {
+        "id": "jwt_kid_oob",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "kid_injection",
+        "note": "kid pointed to an attacker-controlled JWKS/key URL and was fetched"
+      },
+      {
+        "id": "jwt_error_leak",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(JsonWebTokenError|invalid signature|jwt malformed|TokenExpiredError|NotBeforeError|JWT.*(error|invalid|expired))",
+        "confidence": "low",
+        "technique": "error_based",
+        "note": "Token is processed by a JWT library; error alone is not a vulnerability"
+      },
+      {
+        "id": "jwt_weak_secret_info",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(HS256.*public key|secret.*(leaked|found|exposed|hardcoded)|jwks\\.json)",
+        "confidence": "low",
+        "technique": "offline_crack",
+        "note": "Weak/leaked secret hint; cracking happens offline, not in the response"
+      }
+    ],
+    "preconditions": [
+      "Baseline requests: valid token, no token, tampered token",
+      "Compare status AND protected content, not just status"
+    ],
+    "false_positive_hints": [
+      "Library error messages with no acceptance of the tampered token",
+      "Endpoint returns 200 for anonymous users",
+      "Token validated by a gateway that silently strips it",
+      "Clock skew causing false expiry results"
+    ]
+  }
+}

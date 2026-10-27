@@ -1,0 +1,24 @@
+{
+  "admin_panels": [
+    "site:*.com intitle:\"admin login\"",
+    "site:*.com inurl:admin",
+    "site:*.com inurl:login",
+    "site:*.com inurl:wp-admin",
+    "site:*.com inurl:administrator",
+    "site:*.com intitle:\"phpMyAdmin\" inurl:index.php",
+    "site:*.com inurl:admin/login",
+    "site:*.com inurl:adminpanel",
+    "site:*.com inurl:cpanel",
+    "site:*.com inurl:webmail",
+    "site:*.com inurl:plesk",
+    "site:*.com inurl:directadmin",
+    "site:*.com intitle:\"login\" inurl:admin",
+    "site:*.com intitle:\"dashboard\" inurl:login",
+    "site:*.com inurl:manager/html",
+    "site:*.com inurl:admin.php",
+    "site:*.com inurl:login.php",
+    "site:*.com inurl:admin/index.php",
+    "site:*.com intitle:\"control panel\"",
+    "site:*.com intitle:\"administration\""
+  ]
+}

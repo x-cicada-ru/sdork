@@ -1,0 +1,9 @@
+{
+  "deserialization": [
+    "O:8:\"stdClass\":1:{s:4:\"test\";s:5:\"hello\";}",
+    "O:7:\"MyClass\":0:{}",
+    "a:2:{i:0;s:3:\"foo\";i:1;s:3:\"bar\";}",
+    "rO0ABXNyABFqYXZh...",
+    "cos\nsystem\n(S'id'\ntR."
+  ]
+}

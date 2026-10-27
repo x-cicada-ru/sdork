@@ -1,0 +1,22 @@
+{
+  "session_fixation_dorks": [
+    "inurl:login",
+    "inurl:signin",
+    "inurl:auth",
+    "inurl:sso",
+    "inurl:session",
+    "inurl:logout",
+    "inurl:oauth",
+    "inurl:saml",
+    "inurl:password",
+    "inurl:account",
+    "inurl:admin",
+    "inurl:login.php",
+    "inurl:signin.php",
+    "inurl:auth.php",
+    "inurl:session.php",
+    "inurl:PHPSESSID=",
+    "inurl:JSESSIONID=",
+    "inurl:sessionid="
+  ]
+}

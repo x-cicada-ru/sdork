@@ -1,0 +1,26 @@
+{
+  "ldap_dorks": [
+    "inurl:username=",
+    "inurl:user=",
+    "inurl:login=",
+    "inurl:uid=",
+    "inurl:cn=",
+    "inurl:mail=",
+    "inurl:email=",
+    "inurl:directory=",
+    "inurl:search=",
+    "inurl:filter=",
+    "inurl:dn=",
+    "inurl:domain=",
+    "inurl:account=",
+    "inurl:auth=",
+    "inurl:sso=",
+    "inurl:staff=",
+    "inurl:ldap=",
+    "inurl:adfs",
+    "inurl:login.php",
+    "inurl:signin",
+    "inurl:api/login",
+    "inurl:password="
+  ]
+}

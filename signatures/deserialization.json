@@ -1,0 +1,84 @@
+{
+  "deserialization": {
+    "payload_ref": "payloads/deserialization.json",
+    "injection": ["body", "cookie", "header"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "deser_oob_dns",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Gadget chain performed DNS lookup"
+      },
+      {
+        "id": "deser_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Gadget chain performed an HTTP callback"
+      },
+      {
+        "id": "deser_time_delay",
+        "source": "time",
+        "match": "delta",
+        "threshold_ms": 4500,
+        "repeats": 3,
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "time_based",
+        "note": "Gadget chain sleep delay reproduced across requests"
+      },
+      {
+        "id": "deser_php_class_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(unserialize\\(\\)|__PHP_Incomplete_Class|Cannot instantiate|Class .* not found|unserialize.*(error|failed))",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "PHP deserialization attempted and reported the class state"
+      },
+      {
+        "id": "deser_java_exception",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(java\\.io\\.(InvalidClassException|ObjectInputStream|StreamCorruptedException|OptionalDataException)|ClassNotFoundException|NotSerializableException|Cannot deserialize|SerializationException)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "Java deserialization error disclosed"
+      },
+      {
+        "id": "deser_gadget_names",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(ysoserial|CommonsCollections|URLDNS|readObject|readResolve|ObjectInputStream|\\.NET BinaryFormatter|TypeNameHandling)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Gadget/library names leaked in the response"
+      },
+      {
+        "id": "deser_stack_trace",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(at [a-z0-9_.]+(Deserial|Serializer|ObjectInputStream)[A-Za-z0-9_]*\\.[a-z]+\\(|in <Module>)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Stack trace references deserialization code"
+      }
+    ],
+    "preconditions": [
+      "Payload must be delivered in the exact serialization format the app expects",
+      "OOB/timing confirmation is safer than relying on errors"
+    ],
+    "false_positive_hints": [
+      "Generic parse/JSON errors unrelated to object deserialization",
+      "Error traces without any gadget execution",
+      "WAF blocking the serialized blob",
+      "Client-side deserialization (browser/localStorage) only"
+    ]
+  }
+}

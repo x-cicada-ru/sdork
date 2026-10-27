@@ -1,0 +1,78 @@
+{
+  "logic_bypass": {
+    "payload_ref": "payloads/logic_bypass.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "logic_state_change",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"(success|ok|deleted|updated|created)\"\\s*:\\s*(true|\"true\")|operation completed|changes saved)",
+        "requires": ["second_request"],
+        "confidence": "high",
+        "technique": "state_change",
+        "note": "Action performed despite missing privilege; verify with a follow-up GET"
+      },
+      {
+        "id": "logic_price_manipulation",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"(price|total|amount|discount|quantity)\"\\s*:\\s*(-?\\d+|0)(\\.\\d+)?)",
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "parameter_tampering",
+        "note": "Manipulated price/quantity accepted in the final order state"
+      },
+      {
+        "id": "logic_step_skip",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(order (created|confirmed|completed)|payment (accepted|successful)|step [2-9] of)",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "workflow_bypass",
+        "note": "Later workflow step reachable without earlier steps"
+      },
+      {
+        "id": "logic_negative_value",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"(total|amount|balance|quantity)\"\\s*:\\s*-\\d+)",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "parameter_tampering",
+        "note": "Negative value accepted and applied to a business value"
+      },
+      {
+        "id": "logic_role_marker",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(\"role\"\\s*:\\s*\"(admin|superuser|root)\"|\"is_admin\"\\s*:\\s*true)",
+        "requires": ["second_identity"],
+        "confidence": "high",
+        "technique": "privilege_escalation",
+        "note": "Role change accepted through a normal user flow"
+      },
+      {
+        "id": "logic_generic_success",
+        "source": "body",
+        "match": "contains",
+        "value": "success",
+        "confidence": "low",
+        "technique": "state_change",
+        "note": "Weak marker; must be verified against real state"
+      }
+    ],
+    "preconditions": [
+      "Business rules must be mapped first (roles, prices, workflow steps)",
+      "Every claim must be verified with a follow-up request or fresh session"
+    ],
+    "false_positive_hints": [
+      "UI-only success message with no persistence",
+      "Async processing not yet reflected",
+      "Cached/previous response",
+      "The action is actually allowed for the tested role"
+    ]
+  }
+}

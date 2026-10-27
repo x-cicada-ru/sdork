@@ -1,0 +1,67 @@
+{
+  "format_string": {
+    "payload_ref": "payloads/format_string.json",
+    "injection": ["query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "format_null_marker",
+        "source": "body",
+        "match": "regex",
+        "pattern": "\\(null\\)",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "format_string",
+        "note": "%s with missing argument rendered as (null); control must not contain it"
+      },
+      {
+        "id": "format_hex_leak",
+        "source": "body",
+        "match": "regex",
+        "pattern": "0x[0-9a-fA-F]{8,16}",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "memory_read",
+        "note": "%x/%p leaked memory addresses; control must not contain them"
+      },
+      {
+        "id": "format_crash",
+        "source": "status",
+        "match": "in",
+        "values": [500, 502, 503],
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "crash",
+        "note": "%n caused a crash on a CGI/native backend"
+      },
+      {
+        "id": "format_error_hint",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(format string|printf\\(\\)|sprintf\\(\\)|wprintf).*(error|vulnerabilit|uncontrolled)",
+        "confidence": "low",
+        "technique": "error_based",
+        "note": "Debug/diagnostic text mentions format functions"
+      },
+      {
+        "id": "format_repeated_token",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(%s|%x|%p)(\\1){3,}",
+        "confidence": "low",
+        "technique": "reflected",
+        "note": "Payload reflected verbatim, i.e. not interpreted (weak/negative)"
+      }
+    ],
+    "preconditions": [
+      "Relevant mostly for CGI/native backends, not typical web frameworks",
+      "Baseline response must be free of (null) and 0x… tokens"
+    ],
+    "false_positive_hints": [
+      "%s/%x reflected unchanged (not interpreted)",
+      "printf/format examples in documentation",
+      "Random hex values in hashes, IDs or timestamps",
+      "Generic 500 from unrelated input"
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "sqli": {
+    "payload_ref": "payloads/sqli.json",
+    "injection": ["query", "body", "header", "cookie"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "sqli_mysql_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(you have an error in your sql syntax|warning:\\s*mysql_|mysql_fetch_(assoc|array|row)|mysql_num_rows|check the manual that corresponds to your (mysql|mariadb) server version)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "MySQL/MariaDB error text disclosed in response"
+      },
+      {
+        "id": "sqli_mssql_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(unclosed quotation mark after the character string|incorrect syntax near|conversion failed when converting|invalid column name|invalid object name|microsoft odbc sql server driver)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "MSSQL error text disclosed"
+      },
+      {
+        "id": "sqli_oracle_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "ORA-\\d{5}",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "Oracle ORA-xxxxx error code"
+      },
+      {
+        "id": "sqli_postgres_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(syntax error at or near|unterminated quoted string|invalid input syntax for type|operator does not exist|relation \".*\" does not exist|pg_query\\(\\)|postgresql.*error)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "PostgreSQL error text disclosed"
+      },
+      {
+        "id": "sqli_sqlite_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(no such table|no such column|sqlite3?::|datatype mismatch|near \".*\": syntax error)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "SQLite error text disclosed"
+      },
+      {
+        "id": "sqli_generic_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(sqlstate\\[|sql syntax|database error|sql error|query failed|mysql error)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Generic SQL error wording; corroborate with a DB-specific signal"
+      },
+      {
+        "id": "sqli_time_delay",
+        "source": "time",
+        "match": "delta",
+        "threshold_ms": 4500,
+        "repeats": 3,
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "time_based",
+        "note": "Delay must reproduce on repeated requests and exceed baseline by at least 4.5s"
+      },
+      {
+        "id": "sqli_boolean_diff",
+        "source": "body",
+        "match": "diff",
+        "against": "control_payload",
+        "min_delta_percent": 15,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "boolean_blind",
+        "note": "TRUE vs FALSE condition responses must differ consistently"
+      },
+      {
+        "id": "sqli_json_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)\"(error|message|detail)\"\\s*:\\s*\"[^\"]*(sql|syntax|mysql|postgres|ora-|sqlite)",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "SQL error leaked inside a JSON error object"
+      },
+      {
+        "id": "sqli_oob_dns",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "DB engine resolved an attacker-controlled hostname (requires OOB payload)"
+      }
+    ],
+    "preconditions": [
+      "Response is not a WAF block page",
+      "Error text matches the backend DB engine, not a static template"
+    ],
+    "false_positive_hints": [
+      "Generic 500 page without DB-specific text",
+      "WAF/rate-limit pages mentioning SQL keywords",
+      "SQL examples in documentation or blog content",
+      "Errors caused by malformed input that never reached the query",
+      "Single timing spike without reproduction"
+    ]
+  }
+}

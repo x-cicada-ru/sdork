@@ -1,0 +1,67 @@
+{
+  "session_fixation": {
+    "payload_ref": "payloads/session_fixation.json",
+    "injection": ["cookie"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "fixation_cookie_unchanged",
+        "source": "cookie",
+        "match": "unchanged",
+        "cookie": ["session", "PHPSESSID", "JSESSIONID", "connect.sid", "sid"],
+        "requires": ["pre_login_cookie"],
+        "confidence": "high",
+        "technique": "fixation",
+        "note": "Session ID set before login remains valid after authentication"
+      },
+      {
+        "id": "fixation_no_setcookie",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?is)^(?!.*set-cookie)",
+        "requires": ["login_response"],
+        "confidence": "medium",
+        "technique": "fixation",
+        "note": "Login response did not issue a new session cookie"
+      },
+      {
+        "id": "fixation_url_session",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(;jsessionid=|PHPSESSID=|session_id=|sessionid=)[A-Za-z0-9_-]{8,}",
+        "confidence": "medium",
+        "technique": "url_session",
+        "note": "Session ID accepted/embedded in URLs"
+      },
+      {
+        "id": "fixation_token_accepted",
+        "source": "status",
+        "match": "in",
+        "values": [200, 302],
+        "requires": ["pre_login_cookie", "baseline"],
+        "confidence": "medium",
+        "technique": "fixation",
+        "note": "Attacker-provided session ID is authenticated after the victim logs in"
+      },
+      {
+        "id": "fixation_missing_flags",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^set-cookie:\\s*(session|sid|connect\\.sid)=(?![^\\r\\n]*(HttpOnly|Secure))",
+        "confidence": "low",
+        "technique": "hardening",
+        "note": "Missing HttpOnly/Secure flags (hardening issue, not fixation by itself)"
+      }
+    ],
+    "preconditions": [
+      "Capture the session cookie before and after authentication",
+      "Use a fresh browser context to avoid unrelated cookie changes"
+    ],
+    "false_positive_hints": [
+      "Stateless JWT-based sessions (no server session to fixate)",
+      "Framework rotates session IDs automatically",
+      "Anonymous session reused legitimately for cart/CSRF",
+      "Cookie changed by a load balancer or CDN"
+    ]
+  }
+}

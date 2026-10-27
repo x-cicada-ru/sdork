@@ -1,0 +1,28 @@
+{
+  "logic_bypass_dorks": [
+    "inurl:checkout",
+    "inurl:cart",
+    "inurl:payment",
+    "inurl:coupon",
+    "inurl:discount",
+    "inurl:promo",
+    "inurl:price",
+    "inurl:amount",
+    "inurl:quantity",
+    "inurl:qty",
+    "inurl:total",
+    "inurl:order",
+    "inurl:subscribe",
+    "inurl:plan",
+    "inurl:upgrade",
+    "inurl:role",
+    "inurl:permission",
+    "inurl:admin",
+    "inurl:api/price",
+    "inurl:api/order",
+    "inurl:api/cart",
+    "inurl:api/payment",
+    "inurl:api/coupon",
+    "inurl:api/subscription"
+  ]
+}

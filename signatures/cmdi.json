@@ -1,0 +1,93 @@
+{
+  "cmdi": {
+    "payload_ref": "payloads/cmdi.json",
+    "injection": ["query", "body", "header"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "cmdi_passwd",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?m)^root:[^:]*:0:0:",
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "Command output leaked /etc/passwd"
+      },
+      {
+        "id": "cmdi_uid",
+        "source": "body",
+        "match": "regex",
+        "pattern": "uid=\\d+\\([a-z0-9_.-]+\\)\\s+gid=\\d+",
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "id command output"
+      },
+      {
+        "id": "cmdi_windows",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(volume serial number|directory of c:\\\\|windows ip configuration|microsoft windows \\[version|nt authority\\\\)",
+        "confidence": "high",
+        "technique": "in_band",
+        "note": "Windows command output (dir/ipconfig/win.ini)"
+      },
+      {
+        "id": "cmdi_time_delay",
+        "source": "time",
+        "match": "delta",
+        "threshold_ms": 4500,
+        "repeats": 3,
+        "requires": ["baseline"],
+        "confidence": "high",
+        "technique": "time_based",
+        "note": "sleep/ping delay reproducible against a control request"
+      },
+      {
+        "id": "cmdi_oob_dns",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Shell resolved an attacker-controlled hostname"
+      },
+      {
+        "id": "cmdi_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Shell fetched an attacker-controlled URL (wget/curl)"
+      },
+      {
+        "id": "cmdi_shell_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)('|\")(id|whoami|uname|cat|dir)('|\") is not recognized as an internal or external command|(sh|bash): .*: command not found",
+        "confidence": "medium",
+        "technique": "error_based",
+        "note": "Shell executed but command unavailable; confirms shell injection"
+      },
+      {
+        "id": "cmdi_echo_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "uid=",
+        "confidence": "low",
+        "technique": "in_band",
+        "note": "Weak marker; corroborate with a unique command output"
+      }
+    ],
+    "preconditions": [
+      "Use a unique marker in OOB or echo-based payloads",
+      "Compare against a control request for timing"
+    ],
+    "false_positive_hints": [
+      "The response page documents shell commands",
+      "Natural slow endpoints or cold starts",
+      "WAF block page containing the payload",
+      "Command output is cached from another request"
+    ]
+  }
+}

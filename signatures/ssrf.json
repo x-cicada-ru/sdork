@@ -1,0 +1,102 @@
+{
+  "ssrf": {
+    "payload_ref": "payloads/ssrf.json",
+    "injection": ["query", "body", "header"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "ssrf_oob_dns",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Server resolved an attacker-controlled hostname"
+      },
+      {
+        "id": "ssrf_oob_http",
+        "source": "oob",
+        "channel": "http",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "oob",
+        "note": "Server fetched an attacker-controlled URL"
+      },
+      {
+        "id": "ssrf_aws_metadata",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(ami-id|instance-id|iam/security-credentials|AccessKeyId|SecretAccessKey|security-credentials/)",
+        "confidence": "high",
+        "technique": "metadata",
+        "note": "AWS EC2 instance metadata response"
+      },
+      {
+        "id": "ssrf_gcp_metadata",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(computeMetadata|metadata\\.google\\.internal|service-accounts|instance/service-accounts)",
+        "confidence": "high",
+        "technique": "metadata",
+        "note": "GCP metadata response"
+      },
+      {
+        "id": "ssrf_azure_metadata",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(metadata/instance|MSI_ENDPOINT|IDENTITY_ENDPOINT|azure.*imds)",
+        "confidence": "high",
+        "technique": "metadata",
+        "note": "Azure IMDS response"
+      },
+      {
+        "id": "ssrf_file_read",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?m)^root:[^:]*:0:0:",
+        "confidence": "high",
+        "technique": "file_scheme",
+        "note": "file:// scheme read a local file"
+      },
+      {
+        "id": "ssrf_redis",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(redis_version|\\+PONG|-ERR unknown command|\\$\\d+\\r\\n)",
+        "confidence": "high",
+        "technique": "protocol_smuggling",
+        "note": "gopher/dict response from Redis"
+      },
+      {
+        "id": "ssrf_connection_error",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(connection refused|failed to connect|no route to host|network is unreachable|timed out.*connect)",
+        "confidence": "medium",
+        "technique": "blind",
+        "note": "Backend connection error leaked; indicates server-side request attempt"
+      },
+      {
+        "id": "ssrf_internal_diff",
+        "source": "length",
+        "match": "diff",
+        "against": "external_control",
+        "min_delta_percent": 20,
+        "requires": ["baseline"],
+        "confidence": "medium",
+        "technique": "blind",
+        "note": "Response differs for internal vs external target (port/service probing)"
+      }
+    ],
+    "preconditions": [
+      "Outbound DNS/HTTP callback infrastructure is required for blind SSRF",
+      "Response body may be empty on success; timing/status differences matter"
+    ],
+    "false_positive_hints": [
+      "Link preview or URL unfurling services",
+      "Open redirect mistaken for SSRF (client-side redirect, no server fetch)",
+      "Cached content or CDN responses",
+      "Proxy error pages that do not prove backend fetch"
+    ]
+  }
+}

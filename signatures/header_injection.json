@@ -1,0 +1,65 @@
+{
+  "header_injection": {
+    "payload_ref": "payloads/header_injection.json",
+    "injection": ["header", "query", "body"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "header_injection_email_oob",
+        "source": "oob",
+        "channel": "dns",
+        "match": "hit",
+        "confidence": "high",
+        "technique": "mail_injection",
+        "note": "Injected Bcc address caused the target mail server to resolve the OOB domain"
+      },
+      {
+        "id": "header_injection_echo",
+        "source": "headers",
+        "match": "regex",
+        "pattern": "(?im)^(location|x-forwarded-host|set-cookie|x-[a-z0-9-]+):\\s*[^\\r\\n]*evil\\.com",
+        "confidence": "high",
+        "technique": "header_injection",
+        "note": "Injected value reflected into a response header"
+      },
+      {
+        "id": "header_injection_reset_link",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)https?://evil\\.com[^\\s\"'<>]*(reset|token|confirm|verify)",
+        "requires": ["account_flow"],
+        "confidence": "high",
+        "technique": "host_header_abuse",
+        "note": "Password reset/confirmation link contains the attacker host"
+      },
+      {
+        "id": "header_injection_raw_split",
+        "source": "raw_response",
+        "match": "regex",
+        "pattern": "(?s)\\r\\n\\r\\nHTTP/1\\.[01]\\s+2\\d\\d",
+        "confidence": "high",
+        "technique": "response_splitting",
+        "note": "Second response injected via header value"
+      },
+      {
+        "id": "header_injection_body_echo",
+        "source": "body",
+        "match": "contains",
+        "value": "Bcc:attacker@evil.com",
+        "confidence": "medium",
+        "technique": "reflected",
+        "note": "Injected mail header text reflected in the response"
+      }
+    ],
+    "preconditions": [
+      "Mail-based confirmation needs an account triggering an email",
+      "Header injection requires CR/LF to survive input handling"
+    ],
+    "false_positive_hints": [
+      "Newlines stripped or encoded",
+      "Mail library sanitizes headers",
+      "Value appears only in the page body, not in real headers",
+      "WAF reflection"
+    ]
+  }
+}

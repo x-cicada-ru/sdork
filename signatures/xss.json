@@ -1,0 +1,83 @@
+{
+  "xss": {
+    "payload_ref": "payloads/xss.json",
+    "injection": ["query", "body", "header"],
+    "match_policy": "any",
+    "signals": [
+      {
+        "id": "xss_script_tag",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?is)<script[^>]*>\\s*alert\\s*\\(\\s*(1|document\\.domain)\\s*\\)\\s*</script>",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "Payload reflected as executable script without encoding"
+      },
+      {
+        "id": "xss_event_handler",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?is)<(img|svg|body|details|input|video|marquee|iframe|object)[^>]*\\bon(error|load|toggle|focus|begin|start|onbegin)\\s*=\\s*(alert|prompt|confirm)\\s*\\(",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "Injected event handler reflected unencoded"
+      },
+      {
+        "id": "xss_javascript_uri",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(href|src|action|data)[^>]{0,40}=\\s*[\"']?\\s*javascript:(alert|prompt|confirm)\\s*\\(",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "javascript: URI reflected in an executable attribute"
+      },
+      {
+        "id": "xss_script_breakout",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?is)</script>\\s*<script[^>]*>\\s*alert\\s*\\(",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "Attribute/script context breakout succeeded"
+      },
+      {
+        "id": "xss_alert_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "<script>alert(1)</script>",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "Exact payload present unencoded in the response"
+      },
+      {
+        "id": "xss_attr_breakout_marker",
+        "source": "body",
+        "match": "contains",
+        "value": "\"><svg/onload=alert(1)>",
+        "confidence": "high",
+        "technique": "reflected",
+        "note": "Quote breakout plus executable tag reflected"
+      },
+      {
+        "id": "xss_dom_sink",
+        "source": "body",
+        "match": "regex",
+        "pattern": "(?i)(document\\.write|innerHTML|outerHTML|insertAdjacentHTML|location\\.hash|eval\\()",
+        "confidence": "low",
+        "technique": "dom",
+        "note": "Sink present in JS source; requires browser-side verification"
+      }
+    ],
+    "preconditions": [
+      "Response Content-Type is text/html or application/xhtml+xml for server-side reflection",
+      "Reflected payload must be in an executable context, not inside a comment or textarea"
+    ],
+    "false_positive_hints": [
+      "Payload reflected HTML-encoded (&lt;script&gt;)",
+      "Payload reflected inside JSON with proper escaping",
+      "Payload inside <textarea>, <title> or an HTML comment",
+      "WAF block page echoing the payload",
+      "Strict CSP may neutralize execution (not a reflection false positive, but lowers impact)"
+    ]
+  }
+}

