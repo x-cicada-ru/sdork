@@ -1,0 +1,38 @@
+{
+  "name": "sdork",
+  "version": "0.0.1",
+  "description": "sdork - CLI framework for finding and confirming web application vulnerabilities: Google dorks, automated target generation, payload testing and signature-based confirmation out of the box. Created by hacker group >_ scope coder and its owner @scope_moon.",
+  "license": "MIT",
+  "author": "@scope_moon",
+  "bin": {
+    "sdork": "bin/sdork.js"
+  },
+  "main": "src/cli.js",
+  "files": [
+    "bin/sdork.js",
+    "src/",
+    "tools/*.js",
+    "dorks/",
+    "payloads/",
+    "signatures/",
+    "user-agents/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test/check.js && node test/verify.js",
+    "check": "node test/check.js",
+    "verify": "node test/verify.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "sdork",
+    "security",
+    "pentest",
+    "bugbounty",
+    "dorks",
+    "payloads"
+  ]
+}

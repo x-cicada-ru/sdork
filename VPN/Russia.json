@@ -1,0 +1,175 @@
+{
+    "dns": {
+        "disableFallback": false,
+        "disableFallbackIfMatch": true,
+        "queryStrategy": "UseIPv4",
+        "servers": [
+            {
+                "address": "localhost",
+                "domains": [
+                    "geosite:category-ru",
+                    "geosite:private"
+                ],
+                "skipFallback": true
+            },
+            {
+                "address": "77.88.8.8",
+                "domains": [
+                    "domain:thejungle.pro"
+                ],
+                "skipFallback": true
+            },
+            {
+                "address": "https://common.dot.dns.yandex.net/dns-query",
+                "skipFallback": false
+            },
+            {
+                "address": "77.88.8.8",
+                "skipFallback": false
+            }
+        ],
+        "tag": "dns_out"
+    },
+    "inbounds": [
+        {
+            "listen": "127.0.0.1",
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "auth": "noauth",
+                "udp": true
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "enabled": true,
+                "routeOnly": true
+            },
+            "tag": "socks"
+        },
+        {
+            "listen": "127.0.0.1",
+            "port": 10809,
+            "protocol": "http",
+            "settings": {
+                "allowTransparent": false
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "enabled": true,
+                "routeOnly": true
+            },
+            "tag": "http"
+        }
+    ],
+    "log": {
+        "dnsLog": false,
+        "loglevel": "error"
+    },
+    "meta": null,
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "ru-primary.junglenode.win",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "xtls-rprx-vision",
+                                "id": "4a393f70-f608-4421-987e-7a03587d8636"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "mzbKm-V5luaGXo1jRtODc6Kkd5eUvjd8zYrVLlVf9gk",
+                    "serverName": "yandex.com",
+                    "shortId": "dd0dedeea2927f92"
+                },
+                "security": "reality",
+                "tcpSettings": {
+                }
+            },
+            "tag": "proxy"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIPv4"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "tcpFastOpen": true,
+                    "tcpKeepAliveIdle": 60,
+                    "tcpKeepAliveInterval": 10,
+                    "tcpUserTimeout": 15000,
+                    "tcpcongestion": "bbr"
+                }
+            },
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "block"
+        }
+    ],
+    "remarks": "🇷🇺 Russia",
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "outboundTag": "block",
+                "protocol": [
+                    "bittorrent"
+                ],
+                "type": "field"
+            },
+            {
+                "ip": [
+                    "127.0.0.0/8",
+                    "10.0.0.0/8",
+                    "172.16.0.0/12",
+                    "192.168.0.0/16",
+                    "169.254.0.0/16",
+                    "::1/128",
+                    "fc00::/7",
+                    "fe80::/10"
+                ],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "domain": [
+                    "localhost",
+                    "localhost.localdomain",
+                    "local",
+                    "*.local",
+                    "*.localdomain",
+                    "*.lan",
+                    "*.internal"
+                ],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "network": "tcp,udp",
+                "outboundTag": "proxy",
+                "type": "field"
+            }
+        ]
+    }
+}

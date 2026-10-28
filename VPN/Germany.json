@@ -1,0 +1,432 @@
+{
+    "burstObservatory": {
+        "pingConfig": {
+            "destination": "http://www.gstatic.com/generate_204",
+            "interval": "120s",
+            "sampling": 1,
+            "timeout": "5s"
+        },
+        "subjectSelector": [
+            "node_primary",
+            "node_fallback",
+            "node_bridge"
+        ]
+    },
+    "dns": {
+        "enableParallelQuery": true,
+        "hosts": {
+            "common.dot.dns.yandex.net": [
+                "77.88.8.8",
+                "77.88.8.1"
+            ],
+            "dns.google": [
+                "8.8.8.8",
+                "8.8.4.4",
+                "2001:4860:4860::8844",
+                "2001:4860:4860::8888"
+            ]
+        },
+        "queryStrategy": "UseIPv4",
+        "serveExpiredTTL": 43200,
+        "serveStale": true,
+        "servers": [
+            {
+                "address": "https://dns.google/dns-query",
+                "timeoutMs": 3000
+            },
+            {
+                "address": "https://common.dot.dns.yandex.net/dns-query",
+                "disableFallbackIfMatch": true,
+                "timeoutMs": 3000
+            },
+            "localhost"
+        ]
+    },
+    "inbounds": [
+        {
+            "listen": "127.0.0.1",
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "auth": "noauth",
+                "udp": true
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "domainsExcluded": [
+                    "courier.push.apple.com",
+                    "push.apple.com",
+                    "api.push.apple.com",
+                    "regexp:(^|\\.)wa\\.me$",
+                    "regexp:(^|\\.)whatsapp\\.com$",
+                    "regexp:(^|\\.)whatsapp\\.net$",
+                    "regexp:(^|\\.)whatsapp\\.org$",
+                    "regexp:(^|\\.)whatsapp\\.info$",
+                    "regexp:(^|\\.)whatsapp\\.cc$",
+                    "regexp:(^|\\.)whatsapp\\.tv$",
+                    "regexp:(^|\\.)whatsappbrand\\.com$",
+                    "regexp:(^|\\.)whatsapp-plus\\.info$",
+                    "regexp:(^|\\.)whatsapp-plus\\.me$",
+                    "regexp:(^|\\.)whatsapp-plus\\.net$"
+                ],
+                "enabled": true,
+                "routeOnly": false
+            },
+            "tag": "socks"
+        },
+        {
+            "listen": "127.0.0.1",
+            "port": 10809,
+            "protocol": "http",
+            "settings": {
+                "allowTransparent": false
+            },
+            "sniffing": {
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ],
+                "domainsExcluded": [
+                    "courier.push.apple.com",
+                    "push.apple.com",
+                    "api.push.apple.com",
+                    "regexp:(^|\\.)wa\\.me$",
+                    "regexp:(^|\\.)whatsapp\\.com$",
+                    "regexp:(^|\\.)whatsapp\\.net$",
+                    "regexp:(^|\\.)whatsapp\\.org$",
+                    "regexp:(^|\\.)whatsapp\\.info$",
+                    "regexp:(^|\\.)whatsapp\\.cc$",
+                    "regexp:(^|\\.)whatsapp\\.tv$",
+                    "regexp:(^|\\.)whatsappbrand\\.com$",
+                    "regexp:(^|\\.)whatsapp-plus\\.info$",
+                    "regexp:(^|\\.)whatsapp-plus\\.me$",
+                    "regexp:(^|\\.)whatsapp-plus\\.net$"
+                ],
+                "enabled": true,
+                "routeOnly": false
+            },
+            "tag": "http"
+        }
+    ],
+    "log": {
+        "dnsLog": false,
+        "loglevel": "error"
+    },
+    "meta": null,
+    "observatory": {
+        "enableConcurrency": true,
+        "probeInterval": "30s",
+        "probeURL": "http://www.gstatic.com/generate_204",
+        "subjectSelector": [
+            "node_primary",
+            "node_fallback",
+            "node_bridge"
+        ]
+    },
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "de.thejungle.pro",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "",
+                                "id": "4a393f70-f608-4421-987e-7a03587d8636"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "grpcSettings": {
+                    "authority": "",
+                    "multiMode": false,
+                    "serviceName": "api.v2.ObjectService"
+                },
+                "network": "grpc",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "HyzCSLgcN9YbYZyGGIhcPSQ2B1UyBoiIoT31CFTJ5G4",
+                    "serverName": "de.thejungle.pro",
+                    "shortId": "7b947c76b3d61f75"
+                },
+                "security": "reality"
+            },
+            "tag": "node_primary"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "de-2.thejungle.pro",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "",
+                                "id": "4a393f70-f608-4421-987e-7a03587d8636"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "grpcSettings": {
+                    "authority": "",
+                    "multiMode": false,
+                    "serviceName": "api.v2.ObjectService"
+                },
+                "network": "grpc",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "9IXd3yqZEviqMNLVuHaW4_TyHEobg0B9B6Nj42ni3T4",
+                    "serverName": "de-2.thejungle.pro",
+                    "shortId": "949aeadab7a82026"
+                },
+                "security": "reality"
+            },
+            "tag": "node_fallback"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "de-fallback-2.junglenode.win",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "xtls-rprx-vision",
+                                "id": "4a393f70-f608-4421-987e-7a03587d8636"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "f-JiF2nOz8ratRr3Lfsw923VLJq4F-HcBE2wbIjy7hY",
+                    "serverName": "de-fallback-2.junglenode.win",
+                    "shortId": "6c927a4b7f8d446f"
+                },
+                "security": "reality",
+                "tcpSettings": {
+                }
+            },
+            "tag": "node_fallback-2"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "ru-de.thejungle.pro",
+                        "port": 443,
+                        "users": [
+                            {
+                                "encryption": "none",
+                                "flow": "xtls-rprx-vision",
+                                "id": "4a393f70-f608-4421-987e-7a03587d8636"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "3ubnnrYxIVDS_ZJmty764dja9lGSPa7qg1kAD0DMn3I",
+                    "serverName": "ru-de.thejungle.pro",
+                    "shortId": "6ecb4d6db87a43e7",
+                    "spiderX": "/"
+                },
+                "security": "reality",
+                "tcpSettings": {
+                }
+            },
+            "tag": "node_bridge"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIPv4"
+            },
+            "streamSettings": {
+                "sockopt": {
+                    "tcpFastOpen": true,
+                    "tcpKeepAliveIdle": 60,
+                    "tcpKeepAliveInterval": 10,
+                    "tcpUserTimeout": 15000,
+                    "tcpcongestion": "bbr"
+                }
+            },
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            },
+            "tag": "block"
+        },
+        {
+            "protocol": "dns",
+            "tag": "dns-out"
+        }
+    ],
+    "remarks": "🇩🇪 Germany",
+    "routing": {
+        "balancers": [
+            {
+                "fallbackTag": "node_bridge",
+                "selector": [
+                    "node_primary",
+                    "node_fallback"
+                ],
+                "strategy": {
+                    "settings": {
+                        "baselines": [
+                            "1s"
+                        ],
+                        "expected": 1,
+                        "maxRTT": "2s",
+                        "tolerance": 0.1
+                    },
+                    "type": "leastLoad"
+                },
+                "tag": "balancer"
+            }
+        ],
+        "domainMatcher": "hybrid",
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "ip": [
+                    "0.0.0.0/8",
+                    "10.0.0.0/8",
+                    "100.64.0.0/10",
+                    "127.0.0.0/8",
+                    "169.254.0.0/16",
+                    "172.16.0.0/12",
+                    "192.0.0.0/24",
+                    "192.0.2.0/24",
+                    "192.88.99.0/24",
+                    "192.168.0.0/16",
+                    "198.18.0.0/15",
+                    "198.51.100.0/24",
+                    "203.0.113.0/24",
+                    "::/127",
+                    "fc00::/7",
+                    "fe80::/10",
+                    "ff00::/8",
+                    "224.0.0.0/3"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "geoip-private",
+                "type": "field"
+            },
+            {
+                "domain": [
+                    "localhost",
+                    "localhost.localdomain",
+                    "local",
+                    "*.local",
+                    "*.localdomain",
+                    "*.lan",
+                    "*.internal"
+                ],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "domain": [
+                    "geosite:category-ru",
+                    "regexp:(^|\\.)[^\\.]+\\.ru$",
+                    "regexp:(^|\\.)[^\\.]+\\.xn--p1ai$"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "ru-and-services-direct",
+                "type": "field"
+            },
+            {
+                "ip": [
+                    "geoip:ru"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "geoip-ru",
+                "type": "field"
+            },
+            {
+                "domain": [
+                    "domain:push.apple.com",
+                    "domain:api.push.apple.com",
+                    "domain:courier.push.apple.com"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "apple-push-direct",
+                "type": "field"
+            },
+            {
+                "domain": [
+                    "dns.google",
+                    "cloudflare-dns.com",
+                    "full:sub.thejungle.pro",
+                    "domain:gstatic.com",
+                    "domain:connectivitycheck.gstatic.com"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "sub-and-probe-direct",
+                "type": "field"
+            },
+            {
+                "ip": [
+                    "1.1.1.1",
+                    "1.0.0.1",
+                    "8.8.8.8",
+                    "8.8.4.4",
+                    "77.88.8.8",
+                    "77.88.8.1"
+                ],
+                "outboundTag": "direct",
+                "ruleTag": "dns-resolvers-direct",
+                "type": "field"
+            },
+            {
+                "outboundTag": "dns-out",
+                "port": "53",
+                "ruleTag": "dns-hijack",
+                "type": "field"
+            },
+            {
+                "outboundTag": "direct",
+                "protocol": [
+                    "bittorrent"
+                ],
+                "ruleTag": "bittorrent-direct",
+                "type": "field"
+            },
+            {
+                "balancerTag": "balancer",
+                "network": "tcp,udp",
+                "ruleTag": "rest-to-balancer",
+                "type": "field"
+            }
+        ]
+    }
+}

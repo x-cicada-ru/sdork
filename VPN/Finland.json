@@ -1,0 +1,112 @@
+{
+    "dns": {
+        "enableParallelQuery": true,
+        "hosts": {
+            "common.dot.dns.yandex.net": ["77.88.8.8", "77.88.8.1"],
+            "dns.google": ["8.8.8.8", "8.8.4.4"]
+        },
+        "queryStrategy": "UseIPv4",
+        "serveExpiredTTL": 43200,
+        "serveStale": true,
+        "servers": [
+            { "address": "https://dns.google/dns-query", "timeoutMs": 3000 },
+            { "address": "https://common.dot.dns.yandex.net/dns-query", "disableFallbackIfMatch": true, "timeoutMs": 3000 },
+            "localhost"
+        ]
+    },
+    "inbounds": [
+        {
+            "listen": "127.0.0.1",
+            "port": 10808,
+            "protocol": "socks",
+            "settings": { "auth": "noauth", "udp": true },
+            "sniffing": { "destOverride": ["http", "tls", "quic"], "enabled": true, "routeOnly": false },
+            "tag": "socks"
+        },
+        {
+            "listen": "127.0.0.1",
+            "port": 10809,
+            "protocol": "http",
+            "settings": { "allowTransparent": false },
+            "sniffing": { "destOverride": ["http", "tls", "quic"], "enabled": true, "routeOnly": false },
+            "tag": "http"
+        }
+    ],
+    "log": { "dnsLog": false, "loglevel": "error" },
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "fl-fallback.junglenode.win",
+                        "port": 443,
+                        "users": [{ "encryption": "none", "flow": "", "id": "4a393f70-f608-4421-987e-7a03587d8636" }]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "grpcSettings": { "authority": "", "multiMode": false, "serviceName": "api.v2.ObjectService" },
+                "network": "grpc",
+                "realitySettings": {
+                    "fingerprint": "firefox",
+                    "publicKey": "MGvFxZqmSWk647S_dfWBdEFPqB7acmgrxi9CKjL4nkI",
+                    "serverName": "fl-fallback.junglenode.win",
+                    "shortId": "089c49ad67a745b7"
+                },
+                "security": "reality"
+            },
+            "tag": "proxy"
+        },
+        {
+            "protocol": "freedom",
+            "settings": { "domainStrategy": "UseIPv4" },
+            "streamSettings": { "sockopt": { "tcpFastOpen": true, "tcpcongestion": "bbr" } },
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "block"
+        },
+        {
+            "protocol": "dns",
+            "tag": "dns-out"
+        }
+    ],
+    "remarks": "🇫🇮 Finland",
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "ip": ["0.0.0.0/8","10.0.0.0/8","127.0.0.0/8","169.254.0.0/16","172.16.0.0/12","192.168.0.0/16","::1/128","fc00::/7","fe80::/10"],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "domain": ["localhost","*.local","*.lan","*.internal"],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "domain": ["geosite:category-ru","regexp:(^|\\.)[^\\.]+\\.ru$","regexp:(^|\\.)[^\\.]+\\.xn--p1ai$"],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "ip": ["geoip:ru"],
+                "outboundTag": "direct",
+                "type": "field"
+            },
+            {
+                "outboundTag": "dns-out",
+                "port": "53",
+                "type": "field"
+            },
+            {
+                "network": "tcp,udp",
+                "outboundTag": "proxy",
+                "type": "field"
+            }
+        ]
+    }
+}
